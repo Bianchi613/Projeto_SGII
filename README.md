@@ -14,7 +14,7 @@ A plataforma permite:
 ## 🧰 Tecnologias Sugeridas
 - **Frontend:** React
 - **Backend:** Node.js com Express
-- **Banco de dados:** PostgreSQL ou MongoDB
+- **Banco de dados:** PostgreSQL
 - **Extras:**
   - JWT para autenticação
   - Upload de arquivos
