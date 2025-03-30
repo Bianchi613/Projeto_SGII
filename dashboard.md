@@ -24,3 +24,8 @@
 - Finalizar diagrama ER
 - Criar autenticação JWT
 - Montar tela de login e dashboard
+## 🔧 Issues do Projeto
+
+Acompanhe as tarefas diretamente nas issues do GitHub:  
+🔗 [Ver todas as Issues](https://github.com/Bianchi613/Projeto_SGII/issues)
+
