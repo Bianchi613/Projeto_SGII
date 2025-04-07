@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Usuario } from './usuario.model';
+import { CreationAttributes } from 'sequelize';
 
 @Injectable()
 export class UsuarioService {
@@ -29,8 +30,8 @@ export class UsuarioService {
     return usuario;
   }
 
-  async create(data: Omit<Usuario, 'id'>): Promise<Usuario> {
-    return this.usuarioModel.create(data as any);
+  async create(data: CreationAttributes<Usuario>): Promise<Usuario> {
+    return this.usuarioModel.create(data);
   }
 
   async update(id: number, data: Partial<Usuario>): Promise<Usuario> {
