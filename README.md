@@ -17,7 +17,7 @@ A plataforma permite:
 ## 🧰 Tecnologias Sugeridas
 
 - **Frontend:** React
-- **Backend:** Node.js com Express
+- **Backend:** Node.js com sequelize
 - **Banco de dados:** PostgreSQL
 - **Extras:**
   - JWT para autenticação
