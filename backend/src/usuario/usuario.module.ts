@@ -1,5 +1,3 @@
-// src/usuario/usuario.module.ts
-
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Usuario } from './usuario.model';
@@ -10,5 +8,6 @@ import { UsuarioController } from './usuario.controller';
   imports: [SequelizeModule.forFeature([Usuario])],
   providers: [UsuarioService],
   controllers: [UsuarioController],
+  exports: [UsuarioService], // ✅ Exporta o serviço para ser usado em outros módulos
 })
 export class UsuarioModule {}

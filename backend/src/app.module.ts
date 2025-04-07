@@ -2,9 +2,11 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+
 import { UsuarioModule } from './usuario/usuario.module';
 import { ChaveModule } from './chave/chave.module';
-import { SalaModule } from './sala/sala.module'; // ✅ Novo módulo adicionado aqui
+import { SalaModule } from './sala/sala.module';
+import { AuthModule } from './auth/auth.module'; // ✅ Aqui
 
 @Module({
   imports: [
@@ -21,7 +23,8 @@ import { SalaModule } from './sala/sala.module'; // ✅ Novo módulo adicionado 
     }),
     UsuarioModule,
     ChaveModule,
-    SalaModule, // ✅ Novo módulo registrado aqui também
+    SalaModule,
+    AuthModule, // ✅ Aqui também
   ],
   controllers: [AppController],
   providers: [AppService],
