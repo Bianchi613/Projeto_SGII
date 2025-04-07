@@ -1,5 +1,3 @@
-// src/usuario/usuario.controller.ts
-
 import {
   Controller,
   Get,
@@ -12,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { Usuario } from './usuario.model';
+import { CreationAttributes } from 'sequelize';
 
 @Controller('usuarios')
 export class UsuarioController {
@@ -28,7 +27,7 @@ export class UsuarioController {
   }
 
   @Post()
-  create(@Body() data: Omit<Usuario, 'id'>): Promise<Usuario> {
+  create(@Body() data: CreationAttributes<Usuario>): Promise<Usuario> {
     return this.usuarioService.create(data);
   }
 
