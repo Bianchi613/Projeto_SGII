@@ -4,7 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 import { UsuarioModule } from './usuario/usuario.module';
-import { ChaveModule } from './chave/chave.module'; // 👈 Adicionado aqui
+import { ChaveModule } from './chave/chave.module';
+import { SalaModule } from './sala/sala.module'; // ✅ Novo módulo adicionado aqui
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { ChaveModule } from './chave/chave.module'; // 👈 Adicionado aqui
       logging: true,
     }),
     UsuarioModule,
-    ChaveModule, // 👈 Adicionado aqui também
+    ChaveModule,
+    SalaModule, // ✅ Novo módulo registrado aqui também
   ],
   controllers: [AppController],
   providers: [AppService],
