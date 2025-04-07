@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-
 import { UsuarioModule } from './usuario/usuario.module';
 import { ChaveModule } from './chave/chave.module';
 import { SalaModule } from './sala/sala.module'; // ✅ Novo módulo adicionado aqui
