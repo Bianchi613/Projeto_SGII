@@ -2,11 +2,10 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-
 import { UsuarioModule } from './usuario/usuario.module';
 import { ChaveModule } from './chave/chave.module';
 import { SalaModule } from './sala/sala.module';
-import { AuthModule } from './auth/auth.module'; // ✅ Aqui
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,7 +23,7 @@ import { AuthModule } from './auth/auth.module'; // ✅ Aqui
     UsuarioModule,
     ChaveModule,
     SalaModule,
-    AuthModule, // ✅ Aqui também
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -20,4 +20,6 @@ async function bootstrap() {
   console.log(`🚀 Rodando em: http://localhost:3000`);
   console.log(`📚 Swagger em: http://localhost:3000/api/docs`);
 }
-bootstrap();
+
+// Use void to explicitly ignore the returned promise
+void bootstrap();
