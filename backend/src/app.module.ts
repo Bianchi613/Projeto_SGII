@@ -18,7 +18,7 @@ import { AuthModule } from './auth/auth.module';
       database: 'projeto_sgii',
       autoLoadModels: true,
       synchronize: true,
-      logging: true,
+      logging: false,
     }),
     UsuarioModule,
     ChaveModule,
