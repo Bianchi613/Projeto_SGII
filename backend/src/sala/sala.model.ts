@@ -1,6 +1,7 @@
 // src/sala/sala.model.ts
 
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, HasOne } from 'sequelize-typescript';
+import { Chave } from '../chave/chave.model';
 
 @Table({ tableName: 'salas' })
 export class Sala extends Model<Sala> {
@@ -21,4 +22,7 @@ export class Sala extends Model<Sala> {
 
   @Column(DataType.INTEGER)
   declare instituicao_id: number;
+
+  @HasOne(() => Chave)
+  declare chave: Chave;
 }
