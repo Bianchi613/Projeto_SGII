@@ -11,8 +11,8 @@ import { LocalStrategy } from './local.strategy';
 
 @Module({
   imports: [
-    UsuarioModule, // ✅ Importa o módulo que exporta UsuarioService
-    PassportModule, // ✅ Necessário para estratégias (JWT, Local, etc.)
+    UsuarioModule,
+    PassportModule,
     JwtModule.register({
       secret: 'minha_chave_secreta_super_segura',
       signOptions: { expiresIn: '1h' },
