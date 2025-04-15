@@ -6,7 +6,8 @@ import { UsuarioModule } from './usuario/usuario.module';
 import { ChaveModule } from './chave/chave.module';
 import { SalaModule } from './sala/sala.module';
 import { AuthModule } from './auth/auth.module';
-import { InstituicaoModule } from './instituicao/instituicao.module'; // 👈 novo módulo
+import { InstituicaoModule } from './instituicao/instituicao.module';
+import { ReservaModule } from './reserva/reserva.module'; // 👈 novo módulo
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { InstituicaoModule } from './instituicao/instituicao.module'; // 👈 no
     UsuarioModule,
     ChaveModule,
     SalaModule,
-    InstituicaoModule, // 👈 aqui também
+    InstituicaoModule,
+    ReservaModule, // 👈 módulo de reservas adicionado
     AuthModule,
   ],
   controllers: [AppController],
