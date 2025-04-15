@@ -8,6 +8,7 @@ import { SalaModule } from './sala/sala.module';
 import { AuthModule } from './auth/auth.module';
 import { InstituicaoModule } from './instituicao/instituicao.module';
 import { ReservaModule } from './reserva/reserva.module'; // 👈 novo módulo
+import { MovimentacaoChavesModule } from './movimentacao-chaves/movimentacao-chaves.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ReservaModule } from './reserva/reserva.module'; // 👈 novo módulo
     ChaveModule,
     SalaModule,
     InstituicaoModule,
+    MovimentacaoChavesModule,
     ReservaModule, // 👈 módulo de reservas adicionado
     AuthModule,
   ],
