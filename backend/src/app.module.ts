@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { InstituicaoModule } from './instituicao/instituicao.module';
 import { ReservaModule } from './reserva/reserva.module'; // 👈 novo módulo
 import { ItensInventarioModule } from './itens-inventario/itens-inventario.module';
+import { LogsUsoModule } from './logs-uso/logs-uso.module';
 import { MovimentacaoChavesModule } from './movimentacao-chaves/movimentacao-chaves.module';
 
 @Module({
@@ -31,6 +32,7 @@ import { MovimentacaoChavesModule } from './movimentacao-chaves/movimentacao-cha
     MovimentacaoChavesModule,
     ReservaModule, //
     ItensInventarioModule,
+    LogsUsoModule,
     AuthModule,
   ],
   controllers: [AppController],
