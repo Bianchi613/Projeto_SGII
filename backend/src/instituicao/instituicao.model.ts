@@ -1,6 +1,10 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
 import { CreationOptional } from 'sequelize';
+
+import { Sala } from '../sala/sala.model';
+import { Usuario } from '../usuario/usuario.model';
+import { ItemInventario } from '../itens-inventario/itens-inventario.model';
 
 @Table({ tableName: 'instituicoes' })
 export class Instituicao extends Model<Instituicao> {
@@ -53,4 +57,18 @@ export class Instituicao extends Model<Instituicao> {
   })
   @Column({ type: DataType.STRING(100), allowNull: true })
   declare email?: string;
+
+  // RELACIONAMENTOS
+
+  @ApiProperty({ type: () => [Sala] })
+  @HasMany(() => Sala)
+  declare salas: Sala[];
+
+  @ApiProperty({ type: () => [Usuario] })
+  @HasMany(() => Usuario)
+  declare usuarios: Usuario[];
+
+  @ApiProperty({ type: () => [ItemInventario] })
+  @HasMany(() => ItemInventario)
+  declare itens_inventario: ItemInventario[];
 }

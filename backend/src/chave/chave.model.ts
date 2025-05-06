@@ -1,5 +1,3 @@
-// src/chave/chave.model.ts
-
 import {
   Table,
   Column,
@@ -7,9 +5,12 @@ import {
   DataType,
   ForeignKey,
   BelongsTo,
+  HasMany,
 } from 'sequelize-typescript';
-import { ApiProperty } from '@nestjs/swagger'; // Agora realmente usado
+import { ApiProperty } from '@nestjs/swagger';
+
 import { Sala } from '../sala/sala.model';
+import { MovimentacaoChave } from '../movimentacao-chaves/movimentacao-chaves.model';
 
 @Table({ tableName: 'chaves' })
 export class Chave extends Model<Chave> {
@@ -22,12 +23,8 @@ export class Chave extends Model<Chave> {
   declare codigo_identificador: string;
 
   @ApiProperty({ example: 5, description: 'ID da sala associada' })
-  @ForeignKey(() => Sala)
   @Column(DataType.INTEGER)
   declare espaco_id: number;
-
-  @BelongsTo(() => Sala)
-  declare sala: Sala;
 
   @ApiProperty({
     example: true,
@@ -42,4 +39,16 @@ export class Chave extends Model<Chave> {
   })
   @Column(DataType.TEXT)
   declare observacoes: string;
+
+  // RELACIONAMENTOS
+
+  @ForeignKey(() => Sala)
+  @Column(DataType.INTEGER)
+  declare sala_id: number;
+
+  @BelongsTo(() => Sala)
+  declare sala: Sala;
+
+  @HasMany(() => MovimentacaoChave)
+  declare movimentacoes_chaves: MovimentacaoChave[];
 }

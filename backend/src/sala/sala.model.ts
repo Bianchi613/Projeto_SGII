@@ -1,52 +1,53 @@
-// src/sala/sala.model.ts
-
-import { Table, Column, Model, DataType, HasOne } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  HasOne,
+  HasMany,
+  BelongsTo,
+  ForeignKey,
+} from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
 import { Chave } from '../chave/chave.model';
+import { Reserva } from '../reserva/reserva.model';
+import { Instituicao } from '../instituicao/instituicao.model';
 
 @Table({ tableName: 'salas' })
 export class Sala extends Model<Sala> {
-  @ApiProperty({
-    example: 1,
-    description: 'ID da sala (gerado automaticamente)',
-  })
+  @ApiProperty({ example: 1 })
   @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
   declare id: number;
 
-  @ApiProperty({
-    example: 'Sala 101',
-    description: 'Nome identificador da sala',
-  })
+  @ApiProperty({ example: 'Sala 101' })
   @Column(DataType.STRING)
   declare nome: string;
 
-  @ApiProperty({
-    example: 'Laboratório',
-    description: 'Tipo de sala (ex: Laboratório, Auditório)',
-  })
+  @ApiProperty({ example: 'Laboratório' })
   @Column(DataType.STRING)
   declare tipo: string;
 
-  @ApiProperty({ example: 30, description: 'Capacidade máxima de pessoas' })
+  @ApiProperty({ example: 30 })
   @Column(DataType.INTEGER)
   declare capacidade: number;
 
-  @ApiProperty({
-    example: { projetor: true, ar_condicionado: false },
-    description: 'Recursos disponíveis na sala',
-    type: Object,
-  })
+  @ApiProperty({ example: { projetor: true, ar_condicionado: false } })
   @Column(DataType.JSONB)
   declare recursos: Record<string, boolean>;
 
-  @ApiProperty({ example: 2, description: 'ID da instituição associada' })
+  @ApiProperty({ example: 2 })
+  @ForeignKey(() => Instituicao)
   @Column(DataType.INTEGER)
   declare instituicao_id: number;
 
-  @ApiProperty({
-    type: () => Chave,
-    description: 'Chave vinculada a esta sala',
-  })
+  @BelongsTo(() => Instituicao)
+  declare instituicao: Instituicao;
+
+  @ApiProperty({ type: () => Chave })
   @HasOne(() => Chave)
   declare chave: Chave;
+
+  @ApiProperty({ type: () => [Reserva] })
+  @HasMany(() => Reserva)
+  declare reservas: Reserva[];
 }

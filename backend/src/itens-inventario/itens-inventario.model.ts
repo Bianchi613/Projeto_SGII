@@ -7,8 +7,9 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
-import { Instituicao } from '../instituicao/instituicao.model';
 import { CreationOptional } from 'sequelize';
+
+import { Instituicao } from '../instituicao/instituicao.model';
 
 @Table({ tableName: 'itens_inventario' })
 export class ItemInventario extends Model<ItemInventario> {
@@ -59,13 +60,18 @@ export class ItemInventario extends Model<ItemInventario> {
   @Column(DataType.DATE)
   declare data_aquisicao: Date;
 
-  @ForeignKey(() => Instituicao)
   @ApiProperty({
     example: 1,
     description: 'ID da instituição que possui o item',
   })
   @Column({ type: DataType.INTEGER, allowNull: false })
   declare instituicao_id: number;
+
+  // RELACIONAMENTO
+
+  @ForeignKey(() => Instituicao)
+  @Column({ type: DataType.INTEGER })
+  declare fk_instituicao: number;
 
   @BelongsTo(() => Instituicao)
   declare instituicao: Instituicao;

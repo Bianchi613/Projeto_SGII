@@ -21,12 +21,8 @@ export class LogUso extends Model<LogUso> {
     example: 2,
     description: 'ID do usuário relacionado ao log (pode ser nulo)',
   })
-  @ForeignKey(() => Usuario)
   @Column({ type: DataType.INTEGER, allowNull: true })
   declare usuario_id: number;
-
-  @BelongsTo(() => Usuario)
-  declare usuario: Usuario;
 
   @ApiProperty({
     example: 'reserva criada',
@@ -56,4 +52,13 @@ export class LogUso extends Model<LogUso> {
   @Default(DataType.NOW)
   @Column({ type: DataType.DATE })
   declare timestamp: Date;
+
+  // RELACIONAMENTO
+
+  @ForeignKey(() => Usuario)
+  @Column({ type: DataType.INTEGER, allowNull: true })
+  declare fk_usuario: number;
+
+  @BelongsTo(() => Usuario)
+  declare usuario: Usuario;
 }
