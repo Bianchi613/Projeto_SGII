@@ -1,5 +1,10 @@
 import { useState } from 'react';
 import './Login.css';
+<div className="bg-red-500 text-white p-4 text-center text-xl">
+  Tailwind está funcionando!
+</div>
+
+
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -35,7 +40,7 @@ export default function Login() {
           </div>
 
           <div className="mt-12 text-sm text-gray-500">
-            <p>Suporte técnico: suporte@sgiisistema.com.br</p>
+            <p>Suporte técnico: alanbianchi@coppe.ufrj.br</p>
           </div>
         </div>
 
@@ -117,7 +122,7 @@ export default function Login() {
 
           <div className="mt-8 border-t border-gray-200 pt-6">
             <p className="text-xs text-gray-500 text-center">
-              © 2023 SGII - Sistema de Gestão de Infraestrutura e Inventário<br />
+              © 2025 SGII - Sistema de Gestão de Infraestrutura e Inventário<br />
               Versão 1.0.0
             </p>
           </div>
