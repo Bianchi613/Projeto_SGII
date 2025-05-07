@@ -1,16 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
-<div className="bg-red-500 text-white p-4 text-center text-xl">
-  Tailwind está funcionando!
-</div>
-
-
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [shake, setShake] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,6 +17,7 @@ export default function Login() {
       return;
     }
     alert('Autenticação realizada com sucesso!');
+    navigate('/dashboard'); // redireciona após login
   };
 
   return (
