@@ -7,9 +7,9 @@
 | 26/03/2025 | Criação do repositório Projeto_SGII                      | ✅ Concluído    |
 | 26/03/2025 | Registro do tema, escopo e banco de dados no README/docs | ✅ Concluído    |
 | 27/03/2025 | Estrutura de pastas (backend, frontend, docs)            | ✅ Concluído    |
-| 28/03/2025 | Modelagem inicial do banco de dados                      | ⏳ Em andamento |
-| 29/03/2025 | Início do backend em Node.js                             | 🔜 Planejado    |
-| 30/03/2025 | Início do frontend em React                              | 🔜 Planejado    |
+| 28/03/2025 | Modelagem inicial do banco de dados                      | ✅ Concluído    |
+| 29/03/2025 | Início do backend em Node.js                             | ✅ Concluído    |
+| 30/03/2025 | Início do frontend em React                              | ⏳ Em andamento    |
 
 ## 📁 Estrutura do Projeto
 
