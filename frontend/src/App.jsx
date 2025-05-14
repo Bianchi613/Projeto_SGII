@@ -3,7 +3,9 @@ import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import Cadastro from "./components/Cadastro/Cadastro";
 import Dashboard from "./components/Dashboard/Dashboard";
-import SalasChaves from "./components/SalasChaves/SalasChaves"; // ✅ importando
+import SalasChaves from "./components/SalasChaves/SalasChaves";
+import ItensInventario from "./components/ItensInventario/ItensInventario";
+import ReservasMovimentacoes from "./components/ReservasMovimentacoes/ReservasMovimentacoes"; // ✅ importando
 import PrivateLayout from "./components/Layouts/PrivateLayout";
 
 function App() {
@@ -18,7 +20,9 @@ function App() {
         {/* Protegidas */}
         <Route element={<PrivateLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/salas-chaves" element={<SalasChaves />} /> {/* ✅ nova rota */}
+          <Route path="/dashboard/salas-chaves" element={<SalasChaves />} />
+          <Route path="/dashboard/itens-inventario" element={<ItensInventario />} />
+          <Route path="/dashboard/reservas-movimentacoes" element={<ReservasMovimentacoes />} /> {/* ✅ nova rota */}
         </Route>
       </Routes>
     </BrowserRouter>

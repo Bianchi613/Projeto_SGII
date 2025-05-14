@@ -57,9 +57,9 @@ export default function SalasChaves() {
                   {Object.entries(sala.recursos || {}).map(
                     ([recurso, ativo], index) => (
                       <span key={index}>
-                        {recurso}: {ativo ? "Sim" : "Não"};{' '}
+                        {recurso}: {ativo ? "Sim" : "Não"};{" "}
                       </span>
-                    )
+                    ),
                   )}
                 </td>
               </tr>
