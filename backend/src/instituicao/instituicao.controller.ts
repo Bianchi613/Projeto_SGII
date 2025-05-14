@@ -1,158 +1,102 @@
+// ✅ instituicao.controller.ts
 import {
   Controller,
   Get,
   Post,
-  Body,
-  Param,
   Put,
   Delete,
-  ParseIntPipe,
+  Param,
+  Body,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiParam,
-  ApiBody,
-} from '@nestjs/swagger';
 import { InstituicaoService } from './instituicao.service';
 import { Instituicao } from './instituicao.model';
-import { CreationAttributes } from 'sequelize';
+import { InstituicaoInput } from './instituicao.repository';
 
-@ApiTags('Instituições')
 @Controller('instituicoes')
 export class InstituicaoController {
   constructor(private readonly instituicaoService: InstituicaoService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Listar todas as instituições' })
-  @ApiResponse({
-    status: 200,
-    description: 'Lista de instituições retornada com sucesso.',
-    schema: {
-      example: [
-        {
-          id: 1,
-          nome: 'Universidade Federal',
-          tipo: 'escola',
-          cnpj_ou_codigo: '12.345.678/0001-99',
-          endereco: 'Rua das Acácias, 123',
-          telefone: '(11) 91234-5678',
-          email: 'contato@uf.edu.br',
-        },
-      ],
-    },
-  })
-  findAll(): Promise<Instituicao[]> {
-    return this.instituicaoService.findAll();
+  async findAll(): Promise<Instituicao[]> {
+    try {
+      return await this.instituicaoService.findAll();
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new HttpException(
+          error.message,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+      throw new HttpException(
+        'Erro ao buscar instituições',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Buscar instituição por ID' })
-  @ApiParam({ name: 'id', type: Number, description: 'ID da instituição' })
-  @ApiResponse({
-    status: 200,
-    description: 'Instituição encontrada.',
-    schema: {
-      example: {
-        id: 1,
-        nome: 'Universidade Federal',
-        tipo: 'escola',
-        cnpj_ou_codigo: '12.345.678/0001-99',
-        endereco: 'Rua das Acácias, 123',
-        telefone: '(11) 91234-5678',
-        email: 'contato@uf.edu.br',
-      },
-    },
-  })
-  @ApiResponse({ status: 404, description: 'Instituição não encontrada.' })
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<Instituicao | null> {
-    return this.instituicaoService.findOne(id);
+  async findOne(@Param('id') id: number): Promise<Instituicao> {
+    try {
+      return await this.instituicaoService.findOne(id);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException(
+        'Instituição não encontrada',
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
   @Post()
-  @ApiOperation({ summary: 'Criar nova instituição' })
-  @ApiBody({
-    schema: {
-      example: {
-        nome: 'Instituto de Pesquisa X',
-        tipo: 'laboratório',
-        cnpj_ou_codigo: '98.765.432/0001-00',
-        endereco: 'Av. das Ciências, 987',
-        telefone: '(21) 99999-9999',
-        email: 'contato@instituto.org',
-      },
-    },
-  })
-  @ApiResponse({
-    status: 201,
-    description: 'Instituição criada com sucesso.',
-    schema: {
-      example: {
-        id: 2,
-        nome: 'Instituto de Pesquisa X',
-        tipo: 'laboratório',
-        cnpj_ou_codigo: '98.765.432/0001-00',
-        endereco: 'Av. das Ciências, 987',
-        telefone: '(21) 99999-9999',
-        email: 'contato@instituto.org',
-      },
-    },
-  })
-  create(@Body() data: CreationAttributes<Instituicao>): Promise<Instituicao> {
-    return this.instituicaoService.create(data);
+  async create(@Body() data: InstituicaoInput): Promise<Instituicao> {
+    try {
+      return await this.instituicaoService.create(data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      }
+      throw new HttpException(
+        'Erro ao criar instituição',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Atualizar instituição existente' })
-  @ApiParam({
-    name: 'id',
-    type: Number,
-    description: 'ID da instituição a ser atualizada',
-  })
-  @ApiBody({
-    schema: {
-      example: {
-        nome: 'Universidade Federal Atualizada',
-        tipo: 'escola',
-        cnpj_ou_codigo: '12.345.678/0001-99',
-        endereco: 'Rua Nova, 456',
-        telefone: '(11) 91234-0000',
-        email: 'atendimento@ufatualizada.edu.br',
-      },
-    },
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Instituição atualizada com sucesso.',
-  })
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() data: Partial<Instituicao>,
-  ): Promise<[affectedCount: number]> {
-    return this.instituicaoService.update(id, data);
+  async update(
+    @Param('id') id: number,
+    @Body() data: Partial<InstituicaoInput>,
+  ): Promise<Instituicao> {
+    try {
+      return await this.instituicaoService.update(id, data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      }
+      throw new HttpException(
+        'Erro ao atualizar instituição',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Remover instituição por ID' })
-  @ApiParam({
-    name: 'id',
-    type: Number,
-    description: 'ID da instituição a ser removida',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Instituição removida com sucesso.',
-    schema: {
-      example: {
-        success: true,
-      },
-    },
-  })
-  async remove(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<{ success: boolean }> {
-    const result = await this.instituicaoService.remove(id);
-    return { success: result > 0 };
+  async delete(@Param('id') id: number): Promise<{ message: string }> {
+    try {
+      await this.instituicaoService.delete(id);
+      return { message: 'Instituição removida com sucesso' };
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException(
+        'Erro ao remover instituição',
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 }
