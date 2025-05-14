@@ -1,38 +1,50 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+import { ChaveRepository } from './chave.repository';
 import { Chave } from './chave.model';
 
 @Injectable()
 export class ChaveService {
-  constructor(
-    @InjectModel(Chave)
-    private chaveModel: typeof Chave,
-  ) {}
+  constructor(private readonly chaveRepository: ChaveRepository) {}
 
   async findAll(): Promise<Chave[]> {
-    return this.chaveModel.findAll();
+    return this.chaveRepository.findAll();
   }
 
   async findOne(id: number): Promise<Chave> {
-    const chave = await this.chaveModel.findByPk(id);
+    const chave = await this.chaveRepository.findOne(id);
     if (!chave) {
-      throw new NotFoundException(`Chave com id ${id} não encontrada`);
+      throw new NotFoundException(`Chave com ID ${id} não encontrada.`);
     }
     return chave;
   }
 
   async create(data: Omit<Chave, 'id'>): Promise<Chave> {
-    return this.chaveModel.create(data as any);
+    try {
+      return await this.chaveRepository.create(data as any); // Substituir por DTO depois
+    } catch {
+      throw new BadRequestException('Erro ao criar chave.');
+    }
   }
 
   async update(id: number, data: Partial<Chave>): Promise<Chave> {
     const chave = await this.findOne(id);
-    return chave.update(data);
+    try {
+      return await this.chaveRepository.update(chave, data);
+    } catch {
+      throw new BadRequestException('Erro ao atualizar chave.');
+    }
   }
 
-  async delete(id: number): Promise<{ success: boolean }> {
+  async delete(id: number): Promise<void> {
     const chave = await this.findOne(id);
-    await chave.destroy();
-    return { success: true };
+    try {
+      await this.chaveRepository.delete(chave);
+    } catch {
+      throw new BadRequestException('Erro ao excluir chave.');
+    }
   }
 }
