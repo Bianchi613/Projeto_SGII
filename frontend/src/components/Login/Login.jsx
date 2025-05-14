@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import './Login.css';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./Login.css";
 
 export default function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [shake, setShake] = useState(false);
-  const [erro, setErro] = useState('');
+  const [erro, setErro] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -21,17 +21,17 @@ export default function Login() {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/auth/login', {
+      const response = await axios.post("http://localhost:3000/auth/login", {
         email: username,
         senha: password,
       });
 
       const token = response.data.access_token;
-      localStorage.setItem('token', token);
-      navigate('/dashboard');
+      localStorage.setItem("token", token);
+      navigate("/dashboard");
     } catch (err) {
       console.error(err); // 👈 agora o ESLint não reclama
-      setErro('Email ou senha inválidos');
+      setErro("Email ou senha inválidos");
       setShake(true);
       setTimeout(() => setShake(false), 500);
     }
@@ -45,13 +45,24 @@ export default function Login() {
           <div className="mb-8">
             <i className="fas fa-boxes text-5xl mb-4 text-gray-800"></i>
             <h1 className="text-3xl font-bold mb-2">SGII</h1>
-            <p className="text-gray-600 font-medium">Sistema de Gestão de Infraestrutura e Inventário</p>
+            <p className="text-gray-600 font-medium">
+              Sistema de Gestão de Infraestrutura e Inventário
+            </p>
           </div>
 
           <div className="space-y-6 mt-8">
-            <Feature icon="building" text="Controle total de infraestrutura e inventário" />
-            <Feature icon="clipboard-check" text="Gestão de ativos e recursos físicos" />
-            <Feature icon="chart-line" text="Relatórios e análises de utilização" />
+            <Feature
+              icon="building"
+              text="Controle total de infraestrutura e inventário"
+            />
+            <Feature
+              icon="clipboard-check"
+              text="Gestão de ativos e recursos físicos"
+            />
+            <Feature
+              icon="chart-line"
+              text="Relatórios e análises de utilização"
+            />
           </div>
 
           <div className="mt-12 text-sm text-gray-500">
@@ -62,13 +73,22 @@ export default function Login() {
         {/* Lado direito - Formulário */}
         <div className="p-10 md:w-1/2 flex flex-col justify-center bg-white">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-800">Acesse o sistema</h2>
-            <p className="text-gray-600">Controle de infraestrutura e inventário</p>
+            <h2 className="text-2xl font-bold text-gray-800">
+              Acesse o sistema
+            </h2>
+            <p className="text-gray-600">
+              Controle de infraestrutura e inventário
+            </p>
           </div>
 
-          <form onSubmit={handleSubmit} className={`space-y-6 ${shake ? 'shake' : ''}`}>
+          <form
+            onSubmit={handleSubmit}
+            className={`space-y-6 ${shake ? "shake" : ""}`}
+          >
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Usuário</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Usuário
+              </label>
               <div className="relative">
                 <i className="fas fa-user absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"></i>
                 <input
@@ -83,11 +103,13 @@ export default function Login() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Senha
+              </label>
               <div className="relative">
                 <i className="fas fa-lock absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"></i>
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   className="pl-10 pr-10 w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-800 input-focus transition duration-200"
                   placeholder="Digite sua senha"
                   value={password}
@@ -99,7 +121,9 @@ export default function Login() {
                   className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                  <i
+                    className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                  ></i>
                 </button>
               </div>
             </div>
@@ -112,12 +136,20 @@ export default function Login() {
                   type="checkbox"
                   className="h-4 w-4 text-gray-800 focus:ring-gray-800 border-gray-300 rounded"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                <label
+                  htmlFor="remember-me"
+                  className="ml-2 block text-sm text-gray-700"
+                >
                   Lembrar de mim
                 </label>
               </div>
               <div className="text-sm">
-                <a href="#" className="font-medium text-gray-800 hover:text-gray-600">Esqueceu sua senha?</a>
+                <a
+                  href="#"
+                  className="font-medium text-gray-800 hover:text-gray-600"
+                >
+                  Esqueceu sua senha?
+                </a>
               </div>
             </div>
 
@@ -135,13 +167,23 @@ export default function Login() {
             )}
 
             <div className="text-center text-sm text-gray-500">
-              Não tem acesso? <a href="#" className="font-medium text-gray-800 hover:text-gray-600">Solicitar credenciais</a>
+              Não tem acesso?{" "}
+              <button
+                type="button"
+                onClick={() => navigate("/cadastro")}
+                className="font-medium text-gray-800 hover:text-gray-600 underline"
+              >
+                Solicitar credenciais
+              </button>
             </div>
+
+
           </form>
 
           <div className="mt-8 border-t border-gray-200 pt-6">
             <p className="text-xs text-gray-500 text-center">
-              © 2025 SGII - Sistema de Gestão de Infraestrutura e Inventário<br />
+              © 2025 SGII - Sistema de Gestão de Infraestrutura e Inventário
+              <br />
               Versão 1.0.0
             </p>
           </div>
