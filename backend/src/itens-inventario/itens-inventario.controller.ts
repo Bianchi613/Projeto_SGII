@@ -1,102 +1,90 @@
+// ✅ item-inventario.controller.ts
 import {
   Controller,
   Get,
   Post,
-  Body,
-  Param,
   Put,
   Delete,
-  ParseIntPipe,
+  Param,
+  Body,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiParam,
-  ApiBody,
-} from '@nestjs/swagger';
-import { ItensInventarioService } from './itens-inventario.service';
+import { ItemInventarioService } from './itens-inventario.service';
 import { ItemInventario } from './itens-inventario.model';
-import { CreationAttributes } from 'sequelize';
+import { ItemInventarioInput } from './itens-inventario.repository';
 
-@ApiTags('Itens de Inventário')
 @Controller('itens-inventario')
-export class ItensInventarioController {
-  constructor(private readonly service: ItensInventarioService) {}
+export class ItemInventarioController {
+  constructor(private readonly service: ItemInventarioService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Listar todos os itens do inventário' })
-  @ApiResponse({
-    status: 200,
-    description: 'Itens encontrados com sucesso.',
-  })
-  findAll(): Promise<ItemInventario[]> {
-    return this.service.findAll();
+  async findAll(): Promise<ItemInventario[]> {
+    try {
+      return await this.service.findAll();
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new HttpException(
+          error.message,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+      throw new HttpException(
+        'Erro ao buscar itens',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Buscar item por ID' })
-  @ApiParam({ name: 'id', type: Number })
-  @ApiResponse({
-    status: 200,
-    description: 'Item encontrado com sucesso.',
-  })
-  findOne(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<ItemInventario | null> {
-    return this.service.findOne(id);
+  async findOne(@Param('id') id: number): Promise<ItemInventario> {
+    try {
+      return await this.service.findOne(id);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException('Item não encontrado', HttpStatus.NOT_FOUND);
+    }
   }
 
   @Post()
-  @ApiOperation({ summary: 'Cadastrar novo item de inventário' })
-  @ApiBody({
-    schema: {
-      example: {
-        nome_item: 'Cadeira Ergonômica',
-        descricao: 'Modelo Presidente, preta',
-        numero_patrimonio: '987654321BR',
-        localizacao_atual: 'Sala 102 - Bloco B',
-        quantidade: 5,
-        estado_conservacao: 'novo',
-        data_aquisicao: '2024-10-20',
-        instituicao_id: 2,
-      },
-    },
-  })
-  @ApiResponse({ status: 201, description: 'Item criado com sucesso.' })
-  create(
-    @Body() data: CreationAttributes<ItemInventario>,
-  ): Promise<ItemInventario> {
-    return this.service.create(data);
+  async create(@Body() data: ItemInventarioInput): Promise<ItemInventario> {
+    try {
+      return await this.service.create(data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      }
+      throw new HttpException('Erro ao criar item', HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Atualizar item de inventário' })
-  @ApiParam({ name: 'id', type: Number })
-  @ApiBody({
-    schema: {
-      example: {
-        quantidade: 4,
-        estado_conservacao: 'bom',
-        localizacao_atual: 'Sala 105 - Bloco C',
-      },
-    },
-  })
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() data: Partial<ItemInventario>,
-  ): Promise<[number]> {
-    return this.service.update(id, data);
+  async update(
+    @Param('id') id: number,
+    @Body() data: Partial<ItemInventarioInput>,
+  ): Promise<ItemInventario> {
+    try {
+      return await this.service.update(id, data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      }
+      throw new HttpException('Erro ao atualizar item', HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Remover item do inventário' })
-  @ApiParam({ name: 'id', type: Number })
-  @ApiResponse({ status: 200, description: 'Item removido com sucesso.' })
-  async remove(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<{ success: boolean }> {
-    const result = await this.service.remove(id);
-    return { success: result > 0 };
+  async delete(@Param('id') id: number): Promise<{ message: string }> {
+    try {
+      await this.service.delete(id);
+      return { message: 'Item removido com sucesso' };
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException('Erro ao remover item', HttpStatus.NOT_FOUND);
+    }
   }
 }

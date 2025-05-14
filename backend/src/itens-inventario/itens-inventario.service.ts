@@ -1,32 +1,66 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+// ✅ item-inventario.service.ts
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+import {
+  ItemInventarioRepository,
+  ItemInventarioInput,
+} from './itens-inventario.repository';
 import { ItemInventario } from './itens-inventario.model';
-import { CreationAttributes } from 'sequelize';
 
 @Injectable()
-export class ItensInventarioService {
-  constructor(
-    @InjectModel(ItemInventario)
-    private model: typeof ItemInventario,
-  ) {}
+export class ItemInventarioService {
+  constructor(private readonly repo: ItemInventarioRepository) {}
 
-  create(data: CreationAttributes<ItemInventario>): Promise<ItemInventario> {
-    return this.model.create(data);
+  async findAll(): Promise<ItemInventario[]> {
+    return this.repo.findAll();
   }
 
-  findAll(): Promise<ItemInventario[]> {
-    return this.model.findAll({ include: { all: true } });
+  async findOne(id: number): Promise<ItemInventario> {
+    const item = await this.repo.findOne(id);
+    if (!item) {
+      throw new NotFoundException(`Item com ID ${id} não encontrado.`);
+    }
+    return item;
   }
 
-  findOne(id: number): Promise<ItemInventario | null> {
-    return this.model.findByPk(id, { include: { all: true } });
+  async create(data: ItemInventarioInput): Promise<ItemInventario> {
+    try {
+      return await this.repo.create(data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new BadRequestException(error.message);
+      }
+      throw new BadRequestException('Erro ao criar item de inventário.');
+    }
   }
 
-  update(id: number, data: Partial<ItemInventario>): Promise<[number]> {
-    return this.model.update(data, { where: { id } });
+  async update(
+    id: number,
+    data: Partial<ItemInventarioInput>,
+  ): Promise<ItemInventario> {
+    const item = await this.findOne(id);
+    try {
+      return await this.repo.update(item, data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new BadRequestException(error.message);
+      }
+      throw new BadRequestException('Erro ao atualizar item.');
+    }
   }
 
-  remove(id: number): Promise<number> {
-    return this.model.destroy({ where: { id } });
+  async delete(id: number): Promise<void> {
+    const item = await this.findOne(id);
+    try {
+      await this.repo.delete(item);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new BadRequestException(error.message);
+      }
+      throw new BadRequestException('Erro ao excluir item.');
+    }
   }
 }
