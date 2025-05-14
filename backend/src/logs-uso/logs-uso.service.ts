@@ -1,28 +1,60 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+// ✅ logs-uso.service.ts
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+import { LogsUsoRepository, LogUsoInput } from './logs-uso.repository';
 import { LogUso } from './logs-uso.model';
-import { CreationAttributes } from 'sequelize';
 
 @Injectable()
 export class LogsUsoService {
-  constructor(
-    @InjectModel(LogUso)
-    private model: typeof LogUso,
-  ) {}
+  constructor(private readonly repo: LogsUsoRepository) {}
 
-  create(data: CreationAttributes<LogUso>): Promise<LogUso> {
-    return this.model.create(data);
+  async findAll(): Promise<LogUso[]> {
+    return this.repo.findAll();
   }
 
-  findAll(): Promise<LogUso[]> {
-    return this.model.findAll({ include: { all: true } });
+  async findOne(id: number): Promise<LogUso> {
+    const log = await this.repo.findOne(id);
+    if (!log) {
+      throw new NotFoundException(`Log com ID ${id} não encontrado.`);
+    }
+    return log;
   }
 
-  findOne(id: number): Promise<LogUso | null> {
-    return this.model.findByPk(id, { include: { all: true } });
+  async create(data: LogUsoInput): Promise<LogUso> {
+    try {
+      return await this.repo.create(data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new BadRequestException(error.message);
+      }
+      throw new BadRequestException('Erro ao criar log de uso.');
+    }
   }
 
-  remove(id: number): Promise<number> {
-    return this.model.destroy({ where: { id } });
+  async update(id: number, data: Partial<LogUsoInput>): Promise<LogUso> {
+    const log = await this.findOne(id);
+    try {
+      return await this.repo.update(log, data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new BadRequestException(error.message);
+      }
+      throw new BadRequestException('Erro ao atualizar log.');
+    }
+  }
+
+  async delete(id: number): Promise<void> {
+    const log = await this.findOne(id);
+    try {
+      await this.repo.delete(log);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new BadRequestException(error.message);
+      }
+      throw new BadRequestException('Erro ao excluir log.');
+    }
   }
 }
