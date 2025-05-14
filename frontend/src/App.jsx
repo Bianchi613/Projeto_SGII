@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
-import Cadastro from "./components/Cadastro/Cadastro"; // ✅ importar o componente de cadastro
+import Cadastro from "./components/Cadastro/Cadastro";
+import Dashboard from "./components/Dashboard/Dashboard"; // ✅ importar o componente Dashboard
 
 function App() {
   return (
@@ -9,7 +10,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/cadastro" element={<Cadastro />} /> {/* ✅ nova rota */}
+        <Route path="/cadastro" element={<Cadastro />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   );

@@ -176,8 +176,6 @@ export default function Login() {
                 Solicitar credenciais
               </button>
             </div>
-
-
           </form>
 
           <div className="mt-8 border-t border-gray-200 pt-6">
