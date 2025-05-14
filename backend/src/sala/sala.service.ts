@@ -1,40 +1,60 @@
-// src/sala/sala.service.ts
-
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+// ✅ sala.service.ts
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+import { SalaRepository, SalaInput } from './sala.repository';
 import { Sala } from './sala.model';
 
 @Injectable()
 export class SalaService {
-  constructor(
-    @InjectModel(Sala)
-    private readonly salaModel: typeof Sala,
-  ) {}
+  constructor(private readonly salaRepository: SalaRepository) {}
 
   async findAll(): Promise<Sala[]> {
-    return this.salaModel.findAll();
+    return this.salaRepository.findAll();
   }
 
   async findOne(id: number): Promise<Sala> {
-    const sala = await this.salaModel.findByPk(id);
+    const sala = await this.salaRepository.findOne(id);
     if (!sala) {
-      throw new NotFoundException(`Sala com id ${id} não encontrada`);
+      throw new NotFoundException(`Sala com ID ${id} não encontrada.`);
     }
     return sala;
   }
 
-  async create(data: Omit<Sala, 'id'>): Promise<Sala> {
-    return this.salaModel.create(data as any);
+  async create(data: SalaInput): Promise<Sala> {
+    try {
+      return await this.salaRepository.create(data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new BadRequestException(error.message);
+      }
+      throw new BadRequestException('Erro ao criar sala.');
+    }
   }
 
-  async update(id: number, data: Partial<Sala>): Promise<Sala> {
+  async update(id: number, data: Partial<SalaInput>): Promise<Sala> {
     const sala = await this.findOne(id);
-    return sala.update(data);
+    try {
+      return await this.salaRepository.update(sala, data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new BadRequestException(error.message);
+      }
+      throw new BadRequestException('Erro ao atualizar sala.');
+    }
   }
 
-  async delete(id: number): Promise<{ success: boolean }> {
+  async delete(id: number): Promise<void> {
     const sala = await this.findOne(id);
-    await sala.destroy();
-    return { success: true };
+    try {
+      await this.salaRepository.delete(sala);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new BadRequestException(error.message);
+      }
+      throw new BadRequestException('Erro ao excluir sala.');
+    }
   }
 }
