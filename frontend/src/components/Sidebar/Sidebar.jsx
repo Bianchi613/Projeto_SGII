@@ -1,3 +1,4 @@
+import "./Sidebar.css"; // Certifique-se de que esse arquivo está em src/components/Sidebar/Sidebar.css
 import { NavLink } from "react-router-dom";
 import {
   FaTachometerAlt,
@@ -8,15 +9,13 @@ import {
   FaCog,
   FaSignOutAlt,
 } from "react-icons/fa";
-import "./Sidebar.css";
-
 export default function Sidebar() {
   return (
     <aside className="sidebar">
       <h2 className="sidebar-title">SGII</h2>
 
       <nav className="sidebar-nav">
-        <NavLink to="/dashboard" className="sidebar-link">
+        <NavLink to="/dashboard" className="sidebar-link" end>
           <FaTachometerAlt className="sidebar-icon" /> Dashboard
         </NavLink>
         <NavLink to="/dashboard/salas-chaves" className="sidebar-link">
@@ -25,7 +24,10 @@ export default function Sidebar() {
         <NavLink to="/dashboard/inventario" className="sidebar-link">
           <FaBoxes className="sidebar-icon" /> Inventário
         </NavLink>
-        <NavLink to="/dashboard/reservas-movimentacoes" className="sidebar-link">
+        <NavLink
+          to="/dashboard/reservas-movimentacoes"
+          className="sidebar-link"
+        >
           <FaCalendarAlt className="sidebar-icon" /> Reservas & Movimentações
         </NavLink>
         <NavLink to="/dashboard/instituicao" className="sidebar-link">
@@ -34,7 +36,7 @@ export default function Sidebar() {
         <NavLink to="/dashboard/configuracoes" className="sidebar-link">
           <FaCog className="sidebar-icon" /> Configurações
         </NavLink>
-        <NavLink to="/login" className="sidebar-link logout">
+        <NavLink to="/login" className="sidebar-link sidebar-logout">
           <FaSignOutAlt className="sidebar-icon" /> Sair
         </NavLink>
       </nav>
