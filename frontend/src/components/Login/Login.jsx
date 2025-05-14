@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Login.css';
 
 export default function Login() {
@@ -7,17 +8,33 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [shake, setShake] = useState(false);
+  const [erro, setErro] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!username || !password) {
       setShake(true);
       setTimeout(() => setShake(false), 500);
       return;
     }
-    alert('Autenticação realizada com sucesso!');
-    navigate('/dashboard'); // redireciona após login
+
+    try {
+      const response = await axios.post('http://localhost:3000/auth/login', {
+        email: username,
+        senha: password,
+      });
+
+      const token = response.data.access_token;
+      localStorage.setItem('token', token);
+      navigate('/dashboard');
+    } catch (err) {
+      console.error(err); // 👈 agora o ESLint não reclama
+      setErro('Email ou senha inválidos');
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+    }
   };
 
   return (
@@ -112,6 +129,10 @@ export default function Login() {
                 Entrar
               </button>
             </div>
+
+            {erro && (
+              <div className="text-red-500 text-center text-sm">{erro}</div>
+            )}
 
             <div className="text-center text-sm text-gray-500">
               Não tem acesso? <a href="#" className="font-medium text-gray-800 hover:text-gray-600">Solicitar credenciais</a>
