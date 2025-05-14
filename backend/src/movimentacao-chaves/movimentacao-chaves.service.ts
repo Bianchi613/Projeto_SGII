@@ -1,32 +1,66 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+// ✅ movimentacao-chaves.service.ts
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+import {
+  MovimentacaoChavesRepository,
+  MovimentacaoChaveInput,
+} from './movimentacao-chaves.repository';
 import { MovimentacaoChave } from './movimentacao-chaves.model';
-import { CreationAttributes } from 'sequelize';
 
 @Injectable()
 export class MovimentacaoChavesService {
-  constructor(
-    @InjectModel(MovimentacaoChave)
-    private model: typeof MovimentacaoChave,
-  ) {}
+  constructor(private readonly repo: MovimentacaoChavesRepository) {}
 
-  create(data: CreationAttributes<MovimentacaoChave>) {
-    return this.model.create(data);
+  async findAll(): Promise<MovimentacaoChave[]> {
+    return this.repo.findAll();
   }
 
-  findAll() {
-    return this.model.findAll({ include: { all: true } });
+  async findOne(id: number): Promise<MovimentacaoChave> {
+    const registro = await this.repo.findOne(id);
+    if (!registro) {
+      throw new NotFoundException(`Movimentação com ID ${id} não encontrada.`);
+    }
+    return registro;
   }
 
-  findOne(id: number) {
-    return this.model.findByPk(id, { include: { all: true } });
+  async create(data: MovimentacaoChaveInput): Promise<MovimentacaoChave> {
+    try {
+      return await this.repo.create(data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new BadRequestException(error.message);
+      }
+      throw new BadRequestException('Erro ao criar movimentação.');
+    }
   }
 
-  update(id: number, data: Partial<MovimentacaoChave>) {
-    return this.model.update(data, { where: { id } });
+  async update(
+    id: number,
+    data: Partial<MovimentacaoChaveInput>,
+  ): Promise<MovimentacaoChave> {
+    const registro = await this.findOne(id);
+    try {
+      return await this.repo.update(registro, data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new BadRequestException(error.message);
+      }
+      throw new BadRequestException('Erro ao atualizar movimentação.');
+    }
   }
 
-  remove(id: number) {
-    return this.model.destroy({ where: { id } });
+  async delete(id: number): Promise<void> {
+    const registro = await this.findOne(id);
+    try {
+      await this.repo.delete(registro);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new BadRequestException(error.message);
+      }
+      throw new BadRequestException('Erro ao excluir movimentação.');
+    }
   }
 }

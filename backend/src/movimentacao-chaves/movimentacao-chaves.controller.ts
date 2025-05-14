@@ -1,151 +1,104 @@
+// ✅ movimentacao-chaves.controller.ts
 import {
   Controller,
   Get,
   Post,
-  Body,
-  Param,
   Put,
   Delete,
-  ParseIntPipe,
+  Param,
+  Body,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiParam,
-  ApiBody,
-} from '@nestjs/swagger';
 import { MovimentacaoChavesService } from './movimentacao-chaves.service';
 import { MovimentacaoChave } from './movimentacao-chaves.model';
-import { CreationAttributes } from 'sequelize';
+import { MovimentacaoChaveInput } from './movimentacao-chaves.repository';
 
-@ApiTags('Movimentações de Chaves')
-@Controller('movimentacoes-chaves')
+@Controller('movimentacao-chaves')
 export class MovimentacaoChavesController {
   constructor(private readonly service: MovimentacaoChavesService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Listar todas as movimentações' })
-  @ApiResponse({
-    status: 200,
-    description: 'Lista de movimentações retornada com sucesso.',
-    schema: {
-      example: [
-        {
-          id: 1,
-          chave_id: 2,
-          usuario_id: 3,
-          data_retirada: '2025-04-15T09:00:00.000Z',
-          data_devolucao: null,
-          responsavel_entrega: 4,
-          responsavel_recebimento: null,
-          observacoes: 'Em posse do setor de manutenção.',
-        },
-      ],
-    },
-  })
-  findAll(): Promise<MovimentacaoChave[]> {
-    return this.service.findAll();
+  async findAll(): Promise<MovimentacaoChave[]> {
+    try {
+      return await this.service.findAll();
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new HttpException(
+          error.message,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+      throw new HttpException(
+        'Erro ao buscar movimentações',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Buscar movimentação por ID' })
-  @ApiParam({ name: 'id', type: Number })
-  @ApiResponse({
-    status: 200,
-    description: 'Movimentação encontrada.',
-    schema: {
-      example: {
-        id: 1,
-        chave_id: 2,
-        usuario_id: 3,
-        data_retirada: '2025-04-15T09:00:00.000Z',
-        data_devolucao: null,
-        responsavel_entrega: 4,
-        responsavel_recebimento: null,
-        observacoes: 'Em posse do setor de manutenção.',
-      },
-    },
-  })
-  @ApiResponse({ status: 404, description: 'Movimentação não encontrada.' })
-  findOne(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<MovimentacaoChave | null> {
-    return this.service.findOne(id);
+  async findOne(@Param('id') id: number): Promise<MovimentacaoChave> {
+    try {
+      return await this.service.findOne(id);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException(
+        'Movimentação não encontrada',
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
   @Post()
-  @ApiOperation({ summary: 'Criar movimentação de chave' })
-  @ApiBody({
-    schema: {
-      example: {
-        chave_id: 1,
-        usuario_id: 3,
-        data_retirada: '2025-04-15T09:00:00',
-        observacoes: 'Entrega para vistoria da elétrica',
-        responsavel_entrega: 2,
-      },
-    },
-  })
-  @ApiResponse({
-    status: 201,
-    description: 'Movimentação criada com sucesso.',
-    schema: {
-      example: {
-        id: 5,
-        chave_id: 1,
-        usuario_id: 3,
-        data_retirada: '2025-04-15T09:00:00.000Z',
-        data_devolucao: null,
-        responsavel_entrega: 2,
-        responsavel_recebimento: null,
-        observacoes: 'Entrega para vistoria da elétrica',
-      },
-    },
-  })
-  create(
-    @Body() data: CreationAttributes<MovimentacaoChave>,
+  async create(
+    @Body() data: MovimentacaoChaveInput,
   ): Promise<MovimentacaoChave> {
-    return this.service.create(data);
+    try {
+      return await this.service.create(data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      }
+      throw new HttpException(
+        'Erro ao criar movimentação',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Atualizar movimentação' })
-  @ApiParam({ name: 'id', type: Number })
-  @ApiBody({
-    schema: {
-      example: {
-        data_devolucao: '2025-04-15T15:00:00',
-        responsavel_recebimento: 4,
-        observacoes: 'Devolvida no setor de patrimônio',
-      },
-    },
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Movimentação atualizada com sucesso.',
-  })
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() data: Partial<MovimentacaoChave>,
-  ): Promise<[number]> {
-    return this.service.update(id, data);
+  async update(
+    @Param('id') id: number,
+    @Body() data: Partial<MovimentacaoChaveInput>,
+  ): Promise<MovimentacaoChave> {
+    try {
+      return await this.service.update(id, data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      }
+      throw new HttpException(
+        'Erro ao atualizar movimentação',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Remover movimentação por ID' })
-  @ApiParam({ name: 'id', type: Number })
-  @ApiResponse({
-    status: 200,
-    description: 'Movimentação removida com sucesso.',
-    schema: {
-      example: { success: true },
-    },
-  })
-  async remove(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<{ success: boolean }> {
-    const result = await this.service.remove(id);
-    return { success: result > 0 };
+  async delete(@Param('id') id: number): Promise<{ message: string }> {
+    try {
+      await this.service.delete(id);
+      return { message: 'Movimentação removida com sucesso' };
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException(
+        'Erro ao remover movimentação',
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 }
