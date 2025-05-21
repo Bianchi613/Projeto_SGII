@@ -65,7 +65,9 @@ export default function Configuracoes() {
     try {
       const payload = { ...usuario };
       if (!payload.senha) delete payload.senha; // não envia senha vazia
-      await axios.put(`http://localhost:3000/usuarios/${usuario.id}`, payload, { headers });
+      await axios.put(`http://localhost:3000/usuarios/${usuario.id}`, payload, {
+        headers,
+      });
       setSucesso("Perfil atualizado com sucesso!");
     } catch (err) {
       console.error(err);
@@ -94,9 +96,16 @@ export default function Configuracoes() {
 
   const handleDeletar = async () => {
     if (!usuario.id) return;
-    if (!window.confirm("Tem certeza que deseja deletar seu perfil? Esta ação é irreversível.")) return;
+    if (
+      !window.confirm(
+        "Tem certeza que deseja deletar seu perfil? Esta ação é irreversível.",
+      )
+    )
+      return;
     try {
-      await axios.delete(`http://localhost:3000/usuarios/${usuario.id}`, { headers });
+      await axios.delete(`http://localhost:3000/usuarios/${usuario.id}`, {
+        headers,
+      });
       localStorage.removeItem("token");
       navigate("/login");
     } catch (err) {
@@ -109,7 +118,10 @@ export default function Configuracoes() {
     <div className="configuracoes-container">
       <h1>{criando ? "Criar Novo Usuário" : "Configurações do Perfil"}</h1>
 
-      <form onSubmit={criando ? handleCriar : handleAtualizar} className="configuracoes-form">
+      <form
+        onSubmit={criando ? handleCriar : handleAtualizar}
+        className="configuracoes-form"
+      >
         <label>Nome</label>
         <input
           type="text"
@@ -134,9 +146,7 @@ export default function Configuracoes() {
           required
         />
 
-        <label>
-          Senha {criando ? "*" : "(deixe vazio para não alterar)"}
-        </label>
+        <label>Senha {criando ? "*" : "(deixe vazio para não alterar)"}</label>
         <input
           type="password"
           value={usuario.senha}
@@ -148,7 +158,9 @@ export default function Configuracoes() {
         <input
           type="number"
           value={usuario.instituicao_id || ""}
-          onChange={(e) => setUsuario({ ...usuario, instituicao_id: Number(e.target.value) })}
+          onChange={(e) =>
+            setUsuario({ ...usuario, instituicao_id: Number(e.target.value) })
+          }
           required
         />
 
@@ -158,11 +170,15 @@ export default function Configuracoes() {
           min={1}
           max={5}
           value={usuario.nivel_acesso}
-          onChange={(e) => setUsuario({ ...usuario, nivel_acesso: Number(e.target.value) })}
+          onChange={(e) =>
+            setUsuario({ ...usuario, nivel_acesso: Number(e.target.value) })
+          }
           required
         />
 
-        <button type="submit">{criando ? "Criar Usuário" : "Salvar alterações"}</button>
+        <button type="submit">
+          {criando ? "Criar Usuário" : "Salvar alterações"}
+        </button>
       </form>
 
       {erro && <p className="erro-msg">{erro}</p>}

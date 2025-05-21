@@ -1,4 +1,5 @@
-import "./Sidebar.css"; // Certifique-se de que esse arquivo está em src/components/Sidebar/Sidebar.css
+// src/components/Sidebar/Sidebar.jsx
+import "./Sidebar.css"; // Certifique-se que existe o CSS para estilizar conforme seu layout
 import { NavLink } from "react-router-dom";
 import {
   FaTachometerAlt,
@@ -9,6 +10,7 @@ import {
   FaCog,
   FaSignOutAlt,
 } from "react-icons/fa";
+
 export default function Sidebar() {
   return (
     <aside className="sidebar">
@@ -24,10 +26,7 @@ export default function Sidebar() {
         <NavLink to="/dashboard/itens-inventario" className="sidebar-link">
           <FaBoxes className="sidebar-icon" /> Inventário
         </NavLink>
-        <NavLink
-          to="/dashboard/reservas-movimentacoes"
-          className="sidebar-link"
-        >
+        <NavLink to="/dashboard/reservas-movimentacoes" className="sidebar-link">
           <FaCalendarAlt className="sidebar-icon" /> Reservas & Movimentações
         </NavLink>
         <NavLink to="/dashboard/instituicao" className="sidebar-link">

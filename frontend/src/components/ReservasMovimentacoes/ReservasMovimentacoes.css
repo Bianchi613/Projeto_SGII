@@ -2,6 +2,8 @@
   padding: 2rem;
   background-color: #f9f9f9;
   min-height: 100vh;
+  
+  margin-left: 250px; /* Espaço para sidebar fixa */
 }
 
 .reservas-mov-container h1 {

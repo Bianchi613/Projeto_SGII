@@ -63,7 +63,11 @@ export default function SalasChaves() {
         nome: "",
         tipo: "",
         capacidade: 0,
-        recursos: { projetor: false, ar_condicionado: false, lousa_digital: false },
+        recursos: {
+          projetor: false,
+          ar_condicionado: false,
+          lousa_digital: false,
+        },
       });
       fetchSalas();
     } catch (err) {
@@ -83,7 +87,11 @@ export default function SalasChaves() {
 
   const salvarEdicaoSala = async () => {
     try {
-      await axios.put(`http://localhost:3000/salas/${editSalaId}`, editSalaData, { headers });
+      await axios.put(
+        `http://localhost:3000/salas/${editSalaId}`,
+        editSalaData,
+        { headers },
+      );
       setEditSalaId(null);
       setEditSalaData(null);
       fetchSalas();
@@ -125,7 +133,11 @@ export default function SalasChaves() {
 
   const salvarEdicaoChave = async () => {
     try {
-      await axios.put(`http://localhost:3000/chaves/${editChaveId}`, editChaveData, { headers });
+      await axios.put(
+        `http://localhost:3000/chaves/${editChaveId}`,
+        editChaveData,
+        { headers },
+      );
       setEditChaveId(null);
       setEditChaveData(null);
       fetchChaves();
@@ -172,7 +184,10 @@ export default function SalasChaves() {
                       type="text"
                       value={editSalaData.nome}
                       onChange={(e) =>
-                        setEditSalaData({ ...editSalaData, nome: e.target.value })
+                        setEditSalaData({
+                          ...editSalaData,
+                          nome: e.target.value,
+                        })
                       }
                     />
                   </td>
@@ -181,7 +196,10 @@ export default function SalasChaves() {
                       type="text"
                       value={editSalaData.tipo}
                       onChange={(e) =>
-                        setEditSalaData({ ...editSalaData, tipo: e.target.value })
+                        setEditSalaData({
+                          ...editSalaData,
+                          tipo: e.target.value,
+                        })
                       }
                     />
                   </td>
@@ -190,30 +208,40 @@ export default function SalasChaves() {
                       type="number"
                       value={editSalaData.capacidade}
                       onChange={(e) =>
-                        setEditSalaData({ ...editSalaData, capacidade: Number(e.target.value) })
+                        setEditSalaData({
+                          ...editSalaData,
+                          capacidade: Number(e.target.value),
+                        })
                       }
                     />
                   </td>
                   <td>
-                    {["projetor", "ar_condicionado", "lousa_digital"].map((recurso) => (
-                      <label key={recurso} style={{ marginRight: 10 }}>
-                        <input
-                          type="checkbox"
-                          checked={!!editSalaData.recursos?.[recurso]}
-                          onChange={(e) =>
-                            setEditSalaData({
-                              ...editSalaData,
-                              recursos: { ...editSalaData.recursos, [recurso]: e.target.checked },
-                            })
-                          }
-                        />
-                        {recurso}
-                      </label>
-                    ))}
+                    {["projetor", "ar_condicionado", "lousa_digital"].map(
+                      (recurso) => (
+                        <label key={recurso} style={{ marginRight: 10 }}>
+                          <input
+                            type="checkbox"
+                            checked={!!editSalaData.recursos?.[recurso]}
+                            onChange={(e) =>
+                              setEditSalaData({
+                                ...editSalaData,
+                                recursos: {
+                                  ...editSalaData.recursos,
+                                  [recurso]: e.target.checked,
+                                },
+                              })
+                            }
+                          />
+                          {recurso}
+                        </label>
+                      ),
+                    )}
                   </td>
                   <td>
-                    <button onClick={salvarEdicaoSala}>Salvar</button>
-                    <button onClick={cancelarEdicaoSala}>Cancelar</button>
+                    <div style={{ display: "flex", gap: "8px" }}>
+                      <button onClick={salvarEdicaoSala}>Salvar</button>
+                      <button onClick={cancelarEdicaoSala}>Cancelar</button>
+                    </div>
                   </td>
                 </tr>
               ) : (
@@ -223,18 +251,22 @@ export default function SalasChaves() {
                   <td>{sala.tipo}</td>
                   <td>{sala.capacidade}</td>
                   <td>
-                    {Object.entries(sala.recursos || {}).map(([recurso, ativo], i) => (
-                      <span key={i}>
-                        {recurso}: {ativo ? "Sim" : "Não"};{" "}
-                      </span>
-                    ))}
+                    {Object.entries(sala.recursos || {}).map(
+                      ([recurso, ativo], i) => (
+                        <span key={i}>
+                          {recurso}: {ativo ? "Sim" : "Não"};{" "}
+                        </span>
+                      ),
+                    )}
                   </td>
                   <td>
-                    <button onClick={() => iniciarEdicaoSala(sala)}>Editar</button>
-                    <button onClick={() => deletarSala(sala.id)}>Excluir</button>
+                    <div style={{ display: "flex", gap: "8px" }}>
+                      <button onClick={() => iniciarEdicaoSala(sala)}>Editar</button>
+                      <button onClick={() => deletarSala(sala.id)}>Excluir</button>
+                    </div>
                   </td>
                 </tr>
-              )
+              ),
             )}
             {/* Criar nova sala */}
             <tr>
@@ -244,7 +276,9 @@ export default function SalasChaves() {
                   type="text"
                   placeholder="Nome"
                   value={novaSala.nome}
-                  onChange={(e) => setNovaSala({ ...novaSala, nome: e.target.value })}
+                  onChange={(e) =>
+                    setNovaSala({ ...novaSala, nome: e.target.value })
+                  }
                 />
               </td>
               <td>
@@ -252,7 +286,9 @@ export default function SalasChaves() {
                   type="text"
                   placeholder="Tipo"
                   value={novaSala.tipo}
-                  onChange={(e) => setNovaSala({ ...novaSala, tipo: e.target.value })}
+                  onChange={(e) =>
+                    setNovaSala({ ...novaSala, tipo: e.target.value })
+                  }
                 />
               </td>
               <td>
@@ -261,26 +297,34 @@ export default function SalasChaves() {
                   placeholder="Capacidade"
                   value={novaSala.capacidade}
                   onChange={(e) =>
-                    setNovaSala({ ...novaSala, capacidade: Number(e.target.value) })
+                    setNovaSala({
+                      ...novaSala,
+                      capacidade: Number(e.target.value),
+                    })
                   }
                 />
               </td>
               <td>
-                {["projetor", "ar_condicionado", "lousa_digital"].map((recurso) => (
-                  <label key={recurso} style={{ marginRight: 10 }}>
-                    <input
-                      type="checkbox"
-                      checked={novaSala.recursos[recurso] || false}
-                      onChange={(e) =>
-                        setNovaSala({
-                          ...novaSala,
-                          recursos: { ...novaSala.recursos, [recurso]: e.target.checked },
-                        })
-                      }
-                    />
-                    {recurso}
-                  </label>
-                ))}
+                {["projetor", "ar_condicionado", "lousa_digital"].map(
+                  (recurso) => (
+                    <label key={recurso} style={{ marginRight: 10 }}>
+                      <input
+                        type="checkbox"
+                        checked={novaSala.recursos[recurso] || false}
+                        onChange={(e) =>
+                          setNovaSala({
+                            ...novaSala,
+                            recursos: {
+                              ...novaSala.recursos,
+                              [recurso]: e.target.checked,
+                            },
+                          })
+                        }
+                      />
+                      {recurso}
+                    </label>
+                  ),
+                )}
               </td>
               <td>
                 <button onClick={criarSala}>Criar Sala</button>
@@ -312,7 +356,10 @@ export default function SalasChaves() {
                     <select
                       value={editChaveData.sala_id || ""}
                       onChange={(e) =>
-                        setEditChaveData({ ...editChaveData, sala_id: Number(e.target.value) })
+                        setEditChaveData({
+                          ...editChaveData,
+                          sala_id: Number(e.target.value),
+                        })
                       }
                     >
                       <option value="">Selecione uma sala</option>
@@ -328,7 +375,10 @@ export default function SalasChaves() {
                       type="text"
                       value={editChaveData.status || ""}
                       onChange={(e) =>
-                        setEditChaveData({ ...editChaveData, status: e.target.value })
+                        setEditChaveData({
+                          ...editChaveData,
+                          status: e.target.value,
+                        })
                       }
                     />
                   </td>
@@ -337,13 +387,18 @@ export default function SalasChaves() {
                       type="text"
                       value={editChaveData.observacoes || ""}
                       onChange={(e) =>
-                        setEditChaveData({ ...editChaveData, observacoes: e.target.value })
+                        setEditChaveData({
+                          ...editChaveData,
+                          observacoes: e.target.value,
+                        })
                       }
                     />
                   </td>
                   <td>
-                    <button onClick={salvarEdicaoChave}>Salvar</button>
-                    <button onClick={cancelarEdicaoChave}>Cancelar</button>
+                    <div style={{ display: "flex", gap: "8px" }}>
+                      <button onClick={salvarEdicaoChave}>Salvar</button>
+                      <button onClick={cancelarEdicaoChave}>Cancelar</button>
+                    </div>
                   </td>
                 </tr>
               ) : (
@@ -353,11 +408,13 @@ export default function SalasChaves() {
                   <td>{chave.status}</td>
                   <td>{chave.observacoes}</td>
                   <td>
-                    <button onClick={() => iniciarEdicaoChave(chave)}>Editar</button>
-                    <button onClick={() => deletarChave(chave.id)}>Excluir</button>
+                    <div style={{ display: "flex", gap: "8px" }}>
+                      <button onClick={() => iniciarEdicaoChave(chave)}>Editar</button>
+                      <button onClick={() => deletarChave(chave.id)}>Excluir</button>
+                    </div>
                   </td>
                 </tr>
-              )
+              ),
             )}
             {/* Criar nova chave */}
             <tr>
@@ -365,7 +422,12 @@ export default function SalasChaves() {
               <td>
                 <select
                   value={novaChave.sala_id}
-                  onChange={(e) => setNovaChave({ ...novaChave, sala_id: Number(e.target.value) })}
+                  onChange={(e) =>
+                    setNovaChave({
+                      ...novaChave,
+                      sala_id: Number(e.target.value),
+                    })
+                  }
                 >
                   <option value="">Selecione uma sala</option>
                   {salas.map((s) => (
@@ -380,7 +442,9 @@ export default function SalasChaves() {
                   type="text"
                   placeholder="Status"
                   value={novaChave.status}
-                  onChange={(e) => setNovaChave({ ...novaChave, status: e.target.value })}
+                  onChange={(e) =>
+                    setNovaChave({ ...novaChave, status: e.target.value })
+                  }
                 />
               </td>
               <td>
@@ -388,7 +452,9 @@ export default function SalasChaves() {
                   type="text"
                   placeholder="Observações"
                   value={novaChave.observacoes}
-                  onChange={(e) => setNovaChave({ ...novaChave, observacoes: e.target.value })}
+                  onChange={(e) =>
+                    setNovaChave({ ...novaChave, observacoes: e.target.value })
+                  }
                 />
               </td>
               <td>

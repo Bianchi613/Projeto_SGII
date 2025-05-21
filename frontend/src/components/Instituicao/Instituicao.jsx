@@ -99,7 +99,7 @@ export default function Instituicao() {
       await axios.put(
         `http://localhost:3000/instituicoes/${editandoId}`,
         form,
-        { headers }
+        { headers },
       );
       cancelarEdicao();
       fetchInstituicoes();
@@ -112,9 +112,12 @@ export default function Instituicao() {
 
   // Deletar instituição
   const handleDelete = async (id) => {
-    if (!window.confirm("Tem certeza que deseja remover esta instituição?")) return;
+    if (!window.confirm("Tem certeza que deseja remover esta instituição?"))
+      return;
     try {
-      await axios.delete(`http://localhost:3000/instituicoes/${id}`, { headers });
+      await axios.delete(`http://localhost:3000/instituicoes/${id}`, {
+        headers,
+      });
       if (editandoId === id) cancelarEdicao();
       fetchInstituicoes();
       setErro("");
@@ -130,22 +133,15 @@ export default function Instituicao() {
 
       {erro && <p className="erro">{erro}</p>}
 
-      <form onSubmit={editandoId ? handleUpdate : handleCreate} className="form-instituicao">
+      <form
+        onSubmit={editandoId ? handleUpdate : handleCreate}
+        className="form-instituicao"
+      >
         <label>Nome:</label>
-        <input
-          name="nome"
-          value={form.nome}
-          onChange={handleChange}
-          required
-        />
+        <input name="nome" value={form.nome} onChange={handleChange} required />
 
         <label>Tipo:</label>
-        <input
-          name="tipo"
-          value={form.tipo}
-          onChange={handleChange}
-          required
-        />
+        <input name="tipo" value={form.tipo} onChange={handleChange} required />
 
         <label>CNPJ ou Código:</label>
         <input
@@ -156,18 +152,10 @@ export default function Instituicao() {
         />
 
         <label>Endereço:</label>
-        <input
-          name="endereco"
-          value={form.endereco}
-          onChange={handleChange}
-        />
+        <input name="endereco" value={form.endereco} onChange={handleChange} />
 
         <label>Telefone:</label>
-        <input
-          name="telefone"
-          value={form.telefone}
-          onChange={handleChange}
-        />
+        <input name="telefone" value={form.telefone} onChange={handleChange} />
 
         <label>E-mail:</label>
         <input
