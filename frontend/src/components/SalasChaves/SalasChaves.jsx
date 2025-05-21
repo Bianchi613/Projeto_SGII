@@ -261,8 +261,12 @@ export default function SalasChaves() {
                   </td>
                   <td>
                     <div style={{ display: "flex", gap: "8px" }}>
-                      <button onClick={() => iniciarEdicaoSala(sala)}>Editar</button>
-                      <button onClick={() => deletarSala(sala.id)}>Excluir</button>
+                      <button onClick={() => iniciarEdicaoSala(sala)}>
+                        Editar
+                      </button>
+                      <button onClick={() => deletarSala(sala.id)}>
+                        Excluir
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -409,8 +413,12 @@ export default function SalasChaves() {
                   <td>{chave.observacoes}</td>
                   <td>
                     <div style={{ display: "flex", gap: "8px" }}>
-                      <button onClick={() => iniciarEdicaoChave(chave)}>Editar</button>
-                      <button onClick={() => deletarChave(chave.id)}>Excluir</button>
+                      <button onClick={() => iniciarEdicaoChave(chave)}>
+                        Editar
+                      </button>
+                      <button onClick={() => deletarChave(chave.id)}>
+                        Excluir
+                      </button>
                     </div>
                   </td>
                 </tr>

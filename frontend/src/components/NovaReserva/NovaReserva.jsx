@@ -87,11 +87,7 @@ export default function NovaReserva() {
         </div>
         <div>
           <label>Status</label>
-          <select
-            name="status"
-            value={form.status}
-            onChange={handleChange}
-          >
+          <select name="status" value={form.status} onChange={handleChange}>
             <option value="ativa">Ativa</option>
             <option value="pendente">Pendente</option>
             <option value="cancelada">Cancelada</option>

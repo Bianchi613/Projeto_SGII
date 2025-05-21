@@ -26,7 +26,10 @@ export default function Sidebar() {
         <NavLink to="/dashboard/itens-inventario" className="sidebar-link">
           <FaBoxes className="sidebar-icon" /> Inventário
         </NavLink>
-        <NavLink to="/dashboard/reservas-movimentacoes" className="sidebar-link">
+        <NavLink
+          to="/dashboard/reservas-movimentacoes"
+          className="sidebar-link"
+        >
           <FaCalendarAlt className="sidebar-icon" /> Reservas & Movimentações
         </NavLink>
         <NavLink to="/dashboard/instituicao" className="sidebar-link">
