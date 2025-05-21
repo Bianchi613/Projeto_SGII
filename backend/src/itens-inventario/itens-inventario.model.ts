@@ -64,14 +64,9 @@ export class ItemInventario extends Model<ItemInventario> {
     example: 1,
     description: 'ID da instituição que possui o item',
   })
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  declare instituicao_id: number;
-
-  // RELACIONAMENTO
-
   @ForeignKey(() => Instituicao)
-  @Column({ type: DataType.INTEGER })
-  declare fk_instituicao: number;
+  @Column({ field: 'instituicao_id', type: DataType.INTEGER, allowNull: false })
+  declare instituicaoId: number;
 
   @BelongsTo(() => Instituicao)
   declare instituicao: Instituicao;

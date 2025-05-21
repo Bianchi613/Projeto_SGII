@@ -19,12 +19,20 @@ export class MovimentacaoChave extends Model<MovimentacaoChave> {
   declare id: CreationOptional<number>;
 
   @ApiProperty({ example: 2, description: 'ID da chave movimentada' })
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  declare chave_id: number;
+  @ForeignKey(() => Chave)
+  @Column({ field: 'chave_id', type: DataType.INTEGER, allowNull: false })
+  declare chaveId: number;
+
+  @BelongsTo(() => Chave)
+  declare chave: Chave;
 
   @ApiProperty({ example: 5, description: 'ID do usuário que retirou a chave' })
-  @Column({ type: DataType.INTEGER, allowNull: true })
-  declare usuario_id: number;
+  @ForeignKey(() => Usuario)
+  @Column({ field: 'usuario_id', type: DataType.INTEGER, allowNull: true })
+  declare usuarioId: number;
+
+  @BelongsTo(() => Usuario)
+  declare usuario: Usuario;
 
   @ApiProperty({
     example: '2025-04-15T09:00:00',
@@ -57,20 +65,4 @@ export class MovimentacaoChave extends Model<MovimentacaoChave> {
   @ApiProperty({ example: 'Chave emprestada para manutenção elétrica' })
   @Column(DataType.TEXT)
   declare observacoes: string;
-
-  // RELACIONAMENTOS
-
-  @ForeignKey(() => Chave)
-  @Column(DataType.INTEGER)
-  declare fk_chave: number;
-
-  @BelongsTo(() => Chave)
-  declare chave: Chave;
-
-  @ForeignKey(() => Usuario)
-  @Column(DataType.INTEGER)
-  declare fk_usuario: number;
-
-  @BelongsTo(() => Usuario)
-  declare usuario: Usuario;
 }

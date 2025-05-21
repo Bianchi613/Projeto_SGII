@@ -8,6 +8,7 @@ import {
   ForeignKey,
 } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 
 import { Instituicao } from '../instituicao/instituicao.model';
 import { Reserva } from '../reserva/reserva.model';
@@ -29,6 +30,7 @@ export class Usuario extends Model<Usuario> {
   declare email: string;
 
   @ApiProperty({ example: '$2b$10$abc...' })
+  @Exclude()
   @Column(DataType.STRING)
   declare senha_hash: string;
 

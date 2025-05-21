@@ -17,13 +17,21 @@ export class Reserva extends Model<Reserva> {
   @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
   declare id: number;
 
-  @ApiProperty({ example: 3, description: 'ID da sala reservada' })
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  declare sala_id: number;
-
   @ApiProperty({ example: 5, description: 'ID do usuário que fez a reserva' })
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  declare usuario_id: number;
+  @ForeignKey(() => Usuario)
+  @Column({ field: 'usuario_id', type: DataType.INTEGER, allowNull: false })
+  declare usuarioId: number;
+
+  @BelongsTo(() => Usuario)
+  declare usuario: Usuario;
+
+  @ApiProperty({ example: 3, description: 'ID da sala reservada' })
+  @ForeignKey(() => Sala)
+  @Column({ field: 'sala_id', type: DataType.INTEGER, allowNull: false })
+  declare salaId: number;
+
+  @BelongsTo(() => Sala)
+  declare sala: Sala;
 
   @ApiProperty({
     example: '2025-04-20T10:00:00',
@@ -52,20 +60,4 @@ export class Reserva extends Model<Reserva> {
   })
   @Column({ type: DataType.STRING(20), defaultValue: 'pendente' })
   declare status: string;
-
-  // RELACIONAMENTOS
-
-  @ForeignKey(() => Sala)
-  @Column({ type: DataType.INTEGER })
-  declare fk_sala: number;
-
-  @BelongsTo(() => Sala)
-  declare sala: Sala;
-
-  @ForeignKey(() => Usuario)
-  @Column({ type: DataType.INTEGER })
-  declare fk_usuario: number;
-
-  @BelongsTo(() => Usuario)
-  declare usuario: Usuario;
 }

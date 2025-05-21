@@ -5,9 +5,20 @@ import {
 } from '@nestjs/common';
 import { UsuarioRepository } from './usuario.repository';
 import { Usuario } from './usuario.model';
+import * as bcrypt from 'bcrypt';
 
-// ✅ Tipo seguro para entrada de dados (agora exportável, se quiser importar em outro lugar)
+// ✅ Tipo seguro para entrada de dados
 export type UsuarioInput = {
+  nome: string;
+  email: string;
+  senha: string;
+  cargo: string;
+  instituicao_id: number;
+  nivel_acesso: number;
+};
+
+// ✅ Tipo seguro para criação de usuário no banco
+export type UsuarioCreateData = {
   nome: string;
   email: string;
   senha_hash: string;
@@ -38,10 +49,23 @@ export class UsuarioService {
 
   async create(data: UsuarioInput): Promise<Usuario> {
     try {
-      if (!data.email || !data.nome) {
-        throw new BadRequestException('Nome e e-mail são obrigatórios.');
+      const { nome, email, senha, cargo, instituicao_id, nivel_acesso } = data;
+
+      if (!email || !nome || !senha) {
+        throw new BadRequestException('Nome, e-mail e senha são obrigatórios.');
       }
-      return await this.usuarioRepository.create(data);
+
+      const senha_hash = await bcrypt.hash(senha, 10);
+      const usuarioData: UsuarioCreateData = {
+        nome,
+        email,
+        senha_hash,
+        cargo,
+        instituicao_id,
+        nivel_acesso,
+      };
+
+      return await this.usuarioRepository.create(usuarioData);
     } catch (error: unknown) {
       if (error instanceof Error) {
         throw new BadRequestException(error.message);
@@ -53,7 +77,18 @@ export class UsuarioService {
   async update(id: number, data: Partial<UsuarioInput>): Promise<Usuario> {
     const usuario = await this.findOne(id);
     try {
-      return await this.usuarioRepository.update(usuario, data);
+      const dataAtualizada: Partial<UsuarioCreateData> = { ...data };
+
+      if (
+        'senha' in data &&
+        typeof data.senha === 'string' &&
+        data.senha.trim() !== ''
+      ) {
+        dataAtualizada.senha_hash = await bcrypt.hash(data.senha, 10);
+        delete dataAtualizada['senha'];
+      }
+
+      return await this.usuarioRepository.update(usuario, dataAtualizada);
     } catch (error: unknown) {
       if (error instanceof Error) {
         throw new BadRequestException(error.message);

@@ -7,16 +7,18 @@ import { JwtPayload } from './auth.types';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
   @ApiOperation({ summary: 'Autenticar usuário e gerar token JWT' })
   @ApiBody({
+    description: 'Credenciais do usuário para login',
     schema: {
-      example: {
-        email: 'usuario@email.com',
-        senha: 'senha123',
+      type: 'object',
+      properties: {
+        email: { type: 'string', example: 'joao@email.com' },
+        senha: { type: 'string', example: 'senha123' },
       },
     },
   })
@@ -24,12 +26,21 @@ export class AuthController {
     status: 201,
     description: 'Login bem-sucedido. Retorna o token JWT.',
     schema: {
-      example: {
-        access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+      type: 'object',
+      properties: {
+        access_token: {
+          type: 'string',
+          example:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibm9tZSI6Ikpvw6NvIGRhIFNpbHZhIiwicm9sZSI6IkFkbWluaXN0cmFkb3IiLCJpYXQiOjE3MTYxMzkwMjIsImV4cCI6MTcxNjIyNTQyMn0.QNnXPRkZkCjRZghhlcXHt9IxfmOeQPaY8t1ZWnEqxOY',
+        },
       },
     },
   })
-  login(@Request() req: { user: JwtPayload }) {
+  @ApiResponse({
+    status: 401,
+    description: 'Credenciais inválidas ou não autorizadas',
+  })
+  login(@Request() req: { user: JwtPayload }): { access_token: string } {
     return this.authService.login(req.user);
   }
 }
