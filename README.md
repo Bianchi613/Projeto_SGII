@@ -2,24 +2,42 @@
 
 ## 🎯 Tema
 
-Desenvolvimento de uma plataforma web para gerenciamento inteligente de espaços físicos, controle de chaves, reservas e inventário de recursos compartilhados em ambientes institucionais diversos, como empresas, escolas e laboratórios.
+Plataforma web para **gerenciamento inteligente de espaços físicos, controle de chaves e gestão de inventário** de recursos compartilhados. Voltada para ambientes institucionais como escolas, empresas, laboratórios e órgãos públicos.
 
-## 💡 Escopo
+## 💡 Escopo Funcional
 
-A plataforma permite:
+A plataforma oferece funcionalidades integradas, incluindo:
 
-- Reservas de salas, laboratórios, auditórios, veículos
-- Controle de chaves e acessos físicos
-- Gestão de inventário de equipamentos e materiais
-- Painel administrativo com gráficos e alertas
-- Acesso multiusuário com permissões personalizadas
+- 🔑 **Controle de chaves**: cadastro, empréstimo e rastreamento de chaves físicas.
+- 🗓️ **Reserva de ambientes e recursos**: agendamento de salas, auditórios, laboratórios e veículos.
+- 🧾 **Gestão de inventário**: registro e monitoramento de equipamentos, móveis e materiais.
+- 📊 **Painel administrativo**: gráficos interativos, relatórios e alertas de uso.
+- 👥 **Gestão de usuários**: sistema multiusuário com autenticação segura e permissões por perfil.
+- 📁 **Upload de documentos**: anexos para reservas, inventário e auditoria.
+- 🧾 **Geração de relatórios**: emissão de relatórios em PDF para reservas, movimentações e histórico.
 
-## 🧰 Tecnologias Sugeridas
+## 🧰 Tecnologias Utilizadas
 
-- **Frontend:** React
-- **Backend:** Node.js com sequelize
-- **Banco de dados:** PostgreSQL
-- **Extras:**
-  - JWT para autenticação
-  - Upload de arquivos
-  - Relatórios em PDF
+### 🔹 **Frontend**
+- [React](https://reactjs.org/) com [Vite](https://vitejs.dev/)
+- [TailwindCSS](https://tailwindcss.com/) para estilização
+- [React Router](https://reactrouter.com/) para navegação
+- [Axios](https://axios-http.com/) para requisições HTTP
+
+### 🔹 **Backend**
+- [Node.js](https://nodejs.org/) com [NestJS](https://nestjs.com/)
+- [Sequelize ORM](https://sequelize.org/) para acesso ao banco de dados
+- Autenticação com [JWT](https://jwt.io/)
+- Validação e estruturação com [class-validator](https://github.com/typestack/class-validator)
+
+### 🔹 **Banco de Dados**
+- [PostgreSQL](https://www.postgresql.org/)
+
+### 🔹 **Extras**
+- Upload de arquivos com `multer`
+- Geração de PDFs com `pdfkit` ou `puppeteer`
+- Swagger para documentação de API
+- Docker (futuramente) para ambiente de produção
+
+## 🚧 Estrutura do Projeto
+
