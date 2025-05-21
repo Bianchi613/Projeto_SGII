@@ -3,7 +3,7 @@
 body {
   margin: 0;
   font-family: "Arial", sans-serif;
-  background-color: #f7fafc; /* Matches bg-gray-100 */
+  background-color: #f7fafc; /* Mantém bg-gray-100 */
 }
 
 .bg-gray-100 {
@@ -75,7 +75,7 @@ body {
 }
 
 .text-gray-800 {
-  color: #2d3748;
+  color: #2563eb; /* azul ao invés de cinza escuro */
 }
 
 .mb-6 {
@@ -91,7 +91,7 @@ body {
 }
 
 .text-gray-900 {
-  color: #1a202c;
+  color: #1e40af; /* azul mais escuro */
 }
 
 .mb-4 {
@@ -99,7 +99,7 @@ body {
 }
 
 .text-gray-600 {
-  color: #718096;
+  color: #4b5563; /* cinza médio, menos opaco */
 }
 
 .text-lg {
@@ -135,11 +135,11 @@ body {
 }
 
 .bg-gray-800 {
-  background-color: #2d3748;
+  background-color: #2563eb; /* azul */
 }
 
 .hover\:bg-gray-900:hover {
-  background-color: #1a202c;
+  background-color: #1e40af; /* azul escuro */
 }
 
 .text-white {
@@ -177,7 +177,7 @@ body {
 }
 
 .text-gray-500 {
-  color: #a0aec0;
+  color: #6b7280; /* cinza mais escuro e legível */
 }
 
 .flex.items-start {
@@ -190,7 +190,7 @@ body {
 }
 
 .bg-gray-800.text-white {
-  background-color: #2d3748;
+  background-color: #2563eb;
   color: #ffffff;
 }
 
@@ -207,7 +207,7 @@ body {
 }
 
 .text-gray-700 {
-  color: #4a5568;
+  color: #374151; /* cinza escuro para textos */
 }
 
 .flex-1 {
