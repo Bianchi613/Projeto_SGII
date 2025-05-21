@@ -7,8 +7,10 @@ import SalasChaves from "./components/SalasChaves/SalasChaves";
 import ItensInventario from "./components/ItensInventario/ItensInventario";
 import ReservasMovimentacoes from "./components/ReservasMovimentacoes/ReservasMovimentacoes";
 import Instituicoes from "./components/Instituicao/Instituicao";
-import Configuracoes from "./components/Configuracoes/Configuracoes"; // ✅ importar Configuracoes
+import Configuracoes from "./components/Configuracoes/Configuracoes";
 import PrivateLayout from "./components/Layouts/PrivateLayout";
+import NovaReserva from "./components/NovaReserva/NovaReserva";
+import ReservaDetalhe from "./components/ReservaDetalhe/ReservaDetalhe"; // ✅ importado
 
 function App() {
   return (
@@ -23,20 +25,12 @@ function App() {
         <Route element={<PrivateLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/salas-chaves" element={<SalasChaves />} />
-          <Route
-            path="/dashboard/itens-inventario"
-            element={<ItensInventario />}
-          />
-          <Route
-            path="/dashboard/reservas-movimentacoes"
-            element={<ReservasMovimentacoes />}
-          />
+          <Route path="/dashboard/itens-inventario" element={<ItensInventario />} />
+          <Route path="/dashboard/reservas-movimentacoes" element={<ReservasMovimentacoes />} />
           <Route path="/dashboard/instituicao" element={<Instituicoes />} />
-          <Route
-            path="/dashboard/configuracoes"
-            element={<Configuracoes />}
-          />{" "}
-          {/* ✅ rota configuracoes */}
+          <Route path="/dashboard/configuracoes" element={<Configuracoes />} />
+          <Route path="/dashboard/reservas/novo" element={<NovaReserva />} />
+          <Route path="/dashboard/reservas/:id" element={<ReservaDetalhe />} /> {/* ✅ nova rota */}
         </Route>
       </Routes>
     </BrowserRouter>

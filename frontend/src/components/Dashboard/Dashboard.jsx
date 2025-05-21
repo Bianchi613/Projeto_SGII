@@ -164,7 +164,7 @@ export default function Dashboard() {
                         onClick={() =>
                           navigate(`/dashboard/reservas/${reserva.id}`)
                         }
-                        className="text-blue-600 hover:text-blue-800 text-sm"
+                        className="text-white bg-blue-600 hover:bg-blue-700 text-sm px-3 py-1 rounded"
                       >
                         Ver
                       </button>
