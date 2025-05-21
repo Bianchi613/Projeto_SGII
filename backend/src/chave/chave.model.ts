@@ -22,9 +22,13 @@ export class Chave extends Model<Chave> {
   @Column({ type: DataType.STRING, unique: true })
   declare codigo_identificador: string;
 
-  @ApiProperty({ example: 5, description: 'ID da sala associada' })
+  @ApiProperty({ example: 5, description: 'ID da sala associada à chave' })
+  @ForeignKey(() => Sala)
   @Column(DataType.INTEGER)
-  declare espaco_id: number;
+  declare sala_id: number;
+
+  @BelongsTo(() => Sala)
+  declare sala: Sala;
 
   @ApiProperty({
     example: true,
@@ -39,15 +43,6 @@ export class Chave extends Model<Chave> {
   })
   @Column(DataType.TEXT)
   declare observacoes: string;
-
-  // RELACIONAMENTOS
-
-  @ForeignKey(() => Sala)
-  @Column(DataType.INTEGER)
-  declare sala_id: number;
-
-  @BelongsTo(() => Sala)
-  declare sala: Sala;
 
   @HasMany(() => MovimentacaoChave)
   declare movimentacoes_chaves: MovimentacaoChave[];
