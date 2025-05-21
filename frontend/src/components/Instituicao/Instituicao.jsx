@@ -20,12 +20,9 @@ export default function Instituicao() {
   const token = localStorage.getItem("token");
   const headers = { Authorization: `Bearer ${token}` };
 
-  // Buscar todas as instituições
   const fetchInstituicoes = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/instituicoes", {
-        headers,
-      });
+      const res = await axios.get("http://localhost:3000/instituicoes", { headers });
       setInstituicoes(res.data);
     } catch (err) {
       console.error("Erro ao carregar instituições:", err);
@@ -45,24 +42,15 @@ export default function Instituicao() {
     fetchInstituicoes();
   }, [navigate, token]);
 
-  // Handle campos do formulário
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Criar nova instituição
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
       await axios.post("http://localhost:3000/instituicoes", form, { headers });
-      setForm({
-        nome: "",
-        tipo: "",
-        cnpj_ou_codigo: "",
-        endereco: "",
-        telefone: "",
-        email: "",
-      });
+      setForm({ nome: "", tipo: "", cnpj_ou_codigo: "", endereco: "", telefone: "", email: "" });
       fetchInstituicoes();
       setErro("");
     } catch (err) {
@@ -71,36 +59,22 @@ export default function Instituicao() {
     }
   };
 
-  // Iniciar edição (preenche formulário)
   const startEdit = (instituicao) => {
     setForm(instituicao);
     setEditandoId(instituicao.id);
     setErro("");
   };
 
-  // Cancelar edição
   const cancelarEdicao = () => {
-    setForm({
-      nome: "",
-      tipo: "",
-      cnpj_ou_codigo: "",
-      endereco: "",
-      telefone: "",
-      email: "",
-    });
+    setForm({ nome: "", tipo: "", cnpj_ou_codigo: "", endereco: "", telefone: "", email: "" });
     setEditandoId(null);
     setErro("");
   };
 
-  // Atualizar instituição existente
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(
-        `http://localhost:3000/instituicoes/${editandoId}`,
-        form,
-        { headers },
-      );
+      await axios.put(`http://localhost:3000/instituicoes/${editandoId}`, form, { headers });
       cancelarEdicao();
       fetchInstituicoes();
       setErro("");
@@ -110,14 +84,10 @@ export default function Instituicao() {
     }
   };
 
-  // Deletar instituição
   const handleDelete = async (id) => {
-    if (!window.confirm("Tem certeza que deseja remover esta instituição?"))
-      return;
+    if (!window.confirm("Tem certeza que deseja remover esta instituição?")) return;
     try {
-      await axios.delete(`http://localhost:3000/instituicoes/${id}`, {
-        headers,
-      });
+      await axios.delete(`http://localhost:3000/instituicoes/${id}`, { headers });
       if (editandoId === id) cancelarEdicao();
       fetchInstituicoes();
       setErro("");
@@ -136,79 +106,108 @@ export default function Instituicao() {
       <form
         onSubmit={editandoId ? handleUpdate : handleCreate}
         className="form-instituicao"
+        noValidate
       >
-        <label>Nome:</label>
-        <input name="nome" value={form.nome} onChange={handleChange} required />
+        <div className="form-group">
+          <label htmlFor="nome">Nome:</label>
+          <input id="nome" name="nome" value={form.nome} onChange={handleChange} required />
+        </div>
 
-        <label>Tipo:</label>
-        <input name="tipo" value={form.tipo} onChange={handleChange} required />
+        <div className="form-group">
+          <label htmlFor="tipo">Tipo:</label>
+          <input id="tipo" name="tipo" value={form.tipo} onChange={handleChange} required />
+        </div>
 
-        <label>CNPJ ou Código:</label>
-        <input
-          name="cnpj_ou_codigo"
-          value={form.cnpj_ou_codigo}
-          onChange={handleChange}
-          required
-        />
+        <div className="form-group">
+          <label htmlFor="cnpj_ou_codigo">CNPJ ou Código:</label>
+          <input
+            id="cnpj_ou_codigo"
+            name="cnpj_ou_codigo"
+            value={form.cnpj_ou_codigo}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-        <label>Endereço:</label>
-        <input name="endereco" value={form.endereco} onChange={handleChange} />
+        <div className="form-group">
+          <label htmlFor="endereco">Endereço:</label>
+          <input id="endereco" name="endereco" value={form.endereco} onChange={handleChange} />
+        </div>
 
-        <label>Telefone:</label>
-        <input name="telefone" value={form.telefone} onChange={handleChange} />
+        <div className="form-group">
+          <label htmlFor="telefone">Telefone:</label>
+          <input id="telefone" name="telefone" value={form.telefone} onChange={handleChange} />
+        </div>
 
-        <label>E-mail:</label>
-        <input
-          type="email"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-        />
+        <div className="form-group">
+          <label htmlFor="email">E-mail:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+          />
+        </div>
 
-        <button type="submit">
-          {editandoId ? "Salvar Alterações" : "Criar Instituição"}
-        </button>
-        {editandoId && (
-          <button type="button" onClick={cancelarEdicao}>
-            Cancelar
+        <div className="form-buttons">
+          <button type="submit" className="btn-primary">
+            {editandoId ? "Salvar Alterações" : "Criar Instituição"}
           </button>
-        )}
+          {editandoId && (
+            <button type="button" onClick={cancelarEdicao} className="btn-secondary">
+              Cancelar
+            </button>
+          )}
+        </div>
       </form>
 
       <hr />
 
       <h2>Lista de Instituições</h2>
-      <table className="styled-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Tipo</th>
-            <th>CNPJ/Código</th>
-            <th>Endereço</th>
-            <th>Telefone</th>
-            <th>E-mail</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {instituicoes.map((inst) => (
-            <tr key={inst.id}>
-              <td>{inst.id}</td>
-              <td>{inst.nome}</td>
-              <td>{inst.tipo}</td>
-              <td>{inst.cnpj_ou_codigo}</td>
-              <td>{inst.endereco || "-"}</td>
-              <td>{inst.telefone || "-"}</td>
-              <td>{inst.email || "-"}</td>
-              <td>
-                <button onClick={() => startEdit(inst)}>Editar</button>
-                <button onClick={() => handleDelete(inst.id)}>Remover</button>
-              </td>
+      <div className="table-container">
+        <table className="styled-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Tipo</th>
+              <th>CNPJ/Código</th>
+              <th>Endereço</th>
+              <th>Telefone</th>
+              <th>E-mail</th>
+              <th>Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {instituicoes.length === 0 ? (
+              <tr>
+                <td colSpan="8" style={{ textAlign: "center" }}>
+                  Nenhuma instituição cadastrada.
+                </td>
+              </tr>
+            ) : (
+              instituicoes.map((inst) => (
+                <tr key={inst.id}>
+                  <td>{inst.id}</td>
+                  <td>{inst.nome}</td>
+                  <td>{inst.tipo}</td>
+                  <td>{inst.cnpj_ou_codigo}</td>
+                  <td>{inst.endereco || "-"}</td>
+                  <td>{inst.telefone || "-"}</td>
+                  <td>{inst.email || "-"}</td>
+                  <td>
+                    <div className="btn-actions-container">
+                      <button className="btn-action" onClick={() => startEdit(inst)}>Editar</button>
+                      <button className="btn-action btn-danger" onClick={() => handleDelete(inst.id)}>Remover</button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

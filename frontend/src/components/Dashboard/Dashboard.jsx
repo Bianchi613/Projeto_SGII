@@ -49,8 +49,7 @@ export default function Dashboard() {
           totalChaves: chavesRes.data.length,
           reservasPendentes: reservasAtivasPendentes.length,
           reservasAtivas: reservasAtivasPendentes,
-          salasDisponiveis: salasRes.data.filter((sala) => sala.disponivel)
-            .length,
+          salasDisponiveis: salasRes.data.filter((sala) => sala.disponivel).length,
           itensInventario: itensRes.data.length,
           ultimasMovimentacoes: movimentacoesRes.data
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
