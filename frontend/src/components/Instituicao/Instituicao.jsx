@@ -4,107 +4,223 @@ import axios from "axios";
 import "./Instituicao.css";
 
 export default function Instituicao() {
-  const [instituicao, setInstituicao] = useState(null);
-  const [form, setForm] = useState({ nome: "", tipo: "", cnpj_ou_codigo: "" });
-  const [editando, setEditando] = useState(false);
+  const [instituicoes, setInstituicoes] = useState([]);
+  const [form, setForm] = useState({
+    nome: "",
+    tipo: "",
+    cnpj_ou_codigo: "",
+    endereco: "",
+    telefone: "",
+    email: "",
+  });
+  const [editandoId, setEditandoId] = useState(null);
   const [erro, setErro] = useState("");
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
+  const headers = { Authorization: `Bearer ${token}` };
+
+  // Buscar todas as instituições
+  const fetchInstituicoes = async () => {
+    try {
+      const res = await axios.get("http://localhost:3000/instituicoes", {
+        headers,
+      });
+      setInstituicoes(res.data);
+    } catch (err) {
+      console.error("Erro ao carregar instituições:", err);
+      setErro("Erro ao carregar dados das instituições");
+      if (err.response?.status === 401) {
+        localStorage.removeItem("token");
+        navigate("/login");
+      }
+    }
+  };
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
       return;
     }
+    fetchInstituicoes();
+  }, [navigate, token]);
 
-    axios
-      .get("http://localhost:3000/instituicoes", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        if (res.data.length > 0) {
-          setInstituicao(res.data[0]);
-          setForm(res.data[0]);
-        }
-      })
-      .catch((err) => {
-        console.error("Erro ao carregar instituicao:", err);
-        setErro("Erro ao carregar dados da instituição");
-      });
-  }, [navigate]);
+  // Handle campos do formulário
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  const handleSubmit = async (e) => {
+  // Criar nova instituição
+  const handleCreate = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("token");
     try {
-      await axios.put(
-        `http://localhost:3000/instituicoes/${instituicao.id}`,
-        form,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-      setInstituicao({ ...instituicao, ...form });
-      setEditando(false);
+      await axios.post("http://localhost:3000/instituicoes", form, { headers });
+      setForm({
+        nome: "",
+        tipo: "",
+        cnpj_ou_codigo: "",
+        endereco: "",
+        telefone: "",
+        email: "",
+      });
+      fetchInstituicoes();
+      setErro("");
     } catch (err) {
       console.error(err);
-      setErro("Erro ao salvar alterações");
+      setErro("Erro ao criar instituição");
     }
   };
 
-  if (!instituicao) {
-    return <p className="loading">Carregando...</p>;
-  }
+  // Iniciar edição (preenche formulário)
+  const startEdit = (instituicao) => {
+    setForm(instituicao);
+    setEditandoId(instituicao.id);
+    setErro("");
+  };
+
+  // Cancelar edição
+  const cancelarEdicao = () => {
+    setForm({
+      nome: "",
+      tipo: "",
+      cnpj_ou_codigo: "",
+      endereco: "",
+      telefone: "",
+      email: "",
+    });
+    setEditandoId(null);
+    setErro("");
+  };
+
+  // Atualizar instituição existente
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(
+        `http://localhost:3000/instituicoes/${editandoId}`,
+        form,
+        { headers }
+      );
+      cancelarEdicao();
+      fetchInstituicoes();
+      setErro("");
+    } catch (err) {
+      console.error(err);
+      setErro("Erro ao atualizar instituição");
+    }
+  };
+
+  // Deletar instituição
+  const handleDelete = async (id) => {
+    if (!window.confirm("Tem certeza que deseja remover esta instituição?")) return;
+    try {
+      await axios.delete(`http://localhost:3000/instituicoes/${id}`, { headers });
+      if (editandoId === id) cancelarEdicao();
+      fetchInstituicoes();
+      setErro("");
+    } catch (err) {
+      console.error(err);
+      setErro("Erro ao remover instituição");
+    }
+  };
 
   return (
     <div className="instituicao-container">
-      <h1>Informações da Instituição</h1>
+      <h1>Gestão de Instituições</h1>
 
       {erro && <p className="erro">{erro}</p>}
 
-      {!editando ? (
-        <div className="info-box">
-          <p>
-            <strong>Nome:</strong> {instituicao.nome}
-          </p>
-          <p>
-            <strong>Tipo:</strong> {instituicao.tipo}
-          </p>
-          <p>
-            <strong>CNPJ/Código:</strong> {instituicao.cnpj_ou_codigo}
-          </p>
-          <button className="editar" onClick={() => setEditando(true)}>
-            Editar
-          </button>
-        </div>
-      ) : (
-        <form className="form-edicao" onSubmit={handleSubmit}>
-          <label>Nome:</label>
-          <input
-            value={form.nome}
-            onChange={(e) => setForm({ ...form, nome: e.target.value })}
-          />
+      <form onSubmit={editandoId ? handleUpdate : handleCreate} className="form-instituicao">
+        <label>Nome:</label>
+        <input
+          name="nome"
+          value={form.nome}
+          onChange={handleChange}
+          required
+        />
 
-          <label>Tipo:</label>
-          <input
-            value={form.tipo}
-            onChange={(e) => setForm({ ...form, tipo: e.target.value })}
-          />
+        <label>Tipo:</label>
+        <input
+          name="tipo"
+          value={form.tipo}
+          onChange={handleChange}
+          required
+        />
 
-          <label>CNPJ ou Código:</label>
-          <input
-            value={form.cnpj_ou_codigo}
-            onChange={(e) =>
-              setForm({ ...form, cnpj_ou_codigo: e.target.value })
-            }
-          />
+        <label>CNPJ ou Código:</label>
+        <input
+          name="cnpj_ou_codigo"
+          value={form.cnpj_ou_codigo}
+          onChange={handleChange}
+          required
+        />
 
-          <button type="submit">Salvar</button>
-          <button type="button" onClick={() => setEditando(false)}>
+        <label>Endereço:</label>
+        <input
+          name="endereco"
+          value={form.endereco}
+          onChange={handleChange}
+        />
+
+        <label>Telefone:</label>
+        <input
+          name="telefone"
+          value={form.telefone}
+          onChange={handleChange}
+        />
+
+        <label>E-mail:</label>
+        <input
+          type="email"
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+        />
+
+        <button type="submit">
+          {editandoId ? "Salvar Alterações" : "Criar Instituição"}
+        </button>
+        {editandoId && (
+          <button type="button" onClick={cancelarEdicao}>
             Cancelar
           </button>
-        </form>
-      )}
+        )}
+      </form>
+
+      <hr />
+
+      <h2>Lista de Instituições</h2>
+      <table className="styled-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Tipo</th>
+            <th>CNPJ/Código</th>
+            <th>Endereço</th>
+            <th>Telefone</th>
+            <th>E-mail</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {instituicoes.map((inst) => (
+            <tr key={inst.id}>
+              <td>{inst.id}</td>
+              <td>{inst.nome}</td>
+              <td>{inst.tipo}</td>
+              <td>{inst.cnpj_ou_codigo}</td>
+              <td>{inst.endereco || "-"}</td>
+              <td>{inst.telefone || "-"}</td>
+              <td>{inst.email || "-"}</td>
+              <td>
+                <button onClick={() => startEdit(inst)}>Editar</button>
+                <button onClick={() => handleDelete(inst.id)}>Remover</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

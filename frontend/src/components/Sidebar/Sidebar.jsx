@@ -21,7 +21,7 @@ export default function Sidebar() {
         <NavLink to="/dashboard/salas-chaves" className="sidebar-link">
           <FaKey className="sidebar-icon" /> Salas & Chaves
         </NavLink>
-        <NavLink to="/dashboard/inventario" className="sidebar-link">
+        <NavLink to="/dashboard/itens-inventario" className="sidebar-link">
           <FaBoxes className="sidebar-icon" /> Inventário
         </NavLink>
         <NavLink
