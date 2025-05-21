@@ -79,7 +79,7 @@ export class ChaveController {
   @ApiResponse({ status: 400, description: 'Erro ao criar chave' })
   async create(@Body() data: Omit<Chave, 'id'>): Promise<Chave> {
     try {
-      return await this.chaveService.create(data as any);
+      return await this.chaveService.create(data);
     } catch {
       throw new HttpException('Erro ao criar chave', HttpStatus.BAD_REQUEST);
     }
@@ -106,7 +106,7 @@ export class ChaveController {
   @ApiResponse({ status: 400, description: 'Erro ao atualizar chave' })
   async update(
     @Param('id') id: number,
-    @Body() data: Partial<Chave>,
+    @Body() data: Partial<Omit<Chave, 'id'>>,
   ): Promise<Chave> {
     try {
       return await this.chaveService.update(id, data);
