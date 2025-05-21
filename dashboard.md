@@ -14,11 +14,13 @@
 | 01/04/2025 | Implementação da autenticação JWT                        | ✅ Concluído    |
 | 02/04/2025 | Desenvolvimento da tela de login                         | ✅ Concluído    |
 | 03/04/2025 | Início do desenvolvimento do dashboard com gráficos      | ⏳ Em andamento |
+
 ## 🔧 Issues do Projeto
 
 Acompanhe as tarefas e problemas identificados diretamente nas issues do repositório no GitHub. As issues estão organizadas por categorias, como backend, frontend, banco de dados e documentação, para facilitar o acompanhamento e priorização.
 
 ### Ferramentas Utilizadas
+
 - **Backend**: Node.js, Express.js
 - **Frontend**: React, Chart.js
 - **Banco de Dados**: PostgreSQL

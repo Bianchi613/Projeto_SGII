@@ -22,9 +22,16 @@ function App() {
         <Route element={<PrivateLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/salas-chaves" element={<SalasChaves />} />
-          <Route path="/dashboard/itens-inventario" element={<ItensInventario />} />
-          <Route path="/dashboard/reservas-movimentacoes" element={<ReservasMovimentacoes />} />
-          <Route path="/dashboard/instituicao" element={<Instituicoes />} /> {/* ✅ nova rota */}
+          <Route
+            path="/dashboard/itens-inventario"
+            element={<ItensInventario />}
+          />
+          <Route
+            path="/dashboard/reservas-movimentacoes"
+            element={<ReservasMovimentacoes />}
+          />
+          <Route path="/dashboard/instituicao" element={<Instituicoes />} />{" "}
+          {/* ✅ nova rota */}
         </Route>
       </Routes>
     </BrowserRouter>

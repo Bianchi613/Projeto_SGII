@@ -37,9 +37,13 @@ export default function Instituicao() {
     e.preventDefault();
     const token = localStorage.getItem("token");
     try {
-      await axios.put(`http://localhost:3000/instituicoes/${instituicao.id}`, form, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.put(
+        `http://localhost:3000/instituicoes/${instituicao.id}`,
+        form,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       setInstituicao({ ...instituicao, ...form });
       setEditando(false);
     } catch (err) {
@@ -60,24 +64,45 @@ export default function Instituicao() {
 
       {!editando ? (
         <div className="info-box">
-          <p><strong>Nome:</strong> {instituicao.nome}</p>
-          <p><strong>Tipo:</strong> {instituicao.tipo}</p>
-          <p><strong>CNPJ/Código:</strong> {instituicao.cnpj_ou_codigo}</p>
-          <button className="editar" onClick={() => setEditando(true)}>Editar</button>
+          <p>
+            <strong>Nome:</strong> {instituicao.nome}
+          </p>
+          <p>
+            <strong>Tipo:</strong> {instituicao.tipo}
+          </p>
+          <p>
+            <strong>CNPJ/Código:</strong> {instituicao.cnpj_ou_codigo}
+          </p>
+          <button className="editar" onClick={() => setEditando(true)}>
+            Editar
+          </button>
         </div>
       ) : (
         <form className="form-edicao" onSubmit={handleSubmit}>
           <label>Nome:</label>
-          <input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} />
+          <input
+            value={form.nome}
+            onChange={(e) => setForm({ ...form, nome: e.target.value })}
+          />
 
           <label>Tipo:</label>
-          <input value={form.tipo} onChange={(e) => setForm({ ...form, tipo: e.target.value })} />
+          <input
+            value={form.tipo}
+            onChange={(e) => setForm({ ...form, tipo: e.target.value })}
+          />
 
           <label>CNPJ ou Código:</label>
-          <input value={form.cnpj_ou_codigo} onChange={(e) => setForm({ ...form, cnpj_ou_codigo: e.target.value })} />
+          <input
+            value={form.cnpj_ou_codigo}
+            onChange={(e) =>
+              setForm({ ...form, cnpj_ou_codigo: e.target.value })
+            }
+          />
 
           <button type="submit">Salvar</button>
-          <button type="button" onClick={() => setEditando(false)}>Cancelar</button>
+          <button type="button" onClick={() => setEditando(false)}>
+            Cancelar
+          </button>
         </form>
       )}
     </div>

@@ -19,25 +19,28 @@ A plataforma oferece funcionalidades integradas, incluindo:
 ## 🧰 Tecnologias Utilizadas
 
 ### 🔹 **Frontend**
+
 - [React](https://reactjs.org/) com [Vite](https://vitejs.dev/)
 - [TailwindCSS](https://tailwindcss.com/) para estilização
 - [React Router](https://reactrouter.com/) para navegação
 - [Axios](https://axios-http.com/) para requisições HTTP
 
 ### 🔹 **Backend**
+
 - [Node.js](https://nodejs.org/) com [NestJS](https://nestjs.com/)
 - [Sequelize ORM](https://sequelize.org/) para acesso ao banco de dados
 - Autenticação com [JWT](https://jwt.io/)
 - Validação e estruturação com [class-validator](https://github.com/typestack/class-validator)
 
 ### 🔹 **Banco de Dados**
+
 - [PostgreSQL](https://www.postgresql.org/)
 
 ### 🔹 **Extras**
+
 - Upload de arquivos com `multer`
 - Geração de PDFs com `pdfkit` ou `puppeteer`
 - Swagger para documentação de API
 - Docker (futuramente) para ambiente de produção
 
 ## 🚧 Estrutura do Projeto
-
