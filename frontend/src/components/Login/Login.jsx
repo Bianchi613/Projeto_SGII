@@ -29,18 +29,9 @@ export default function Login() {
       const token = response.data.access_token;
       localStorage.setItem("token", token);
 
-      // Se a API retorna os dados do usuário no login, salve-os no localStorage
       const usuario = response.data.user || response.data.usuario || null;
-
       if (usuario) {
         localStorage.setItem("usuario", JSON.stringify(usuario));
-      } else {
-        // Se não retornar, você pode fazer outra requisição para buscar o perfil aqui
-        // Exemplo:
-        // const perfilRes = await axios.get("http://localhost:3000/usuarios/me", {
-        //   headers: { Authorization: `Bearer ${token}` },
-        // });
-        // localStorage.setItem("usuario", JSON.stringify(perfilRes.data));
       }
 
       navigate("/dashboard");
@@ -66,18 +57,9 @@ export default function Login() {
           </div>
 
           <div className="space-y-6 mt-8">
-            <Feature
-              icon="building"
-              text="Controle total de infraestrutura e inventário"
-            />
-            <Feature
-              icon="clipboard-check"
-              text="Gestão de ativos e recursos físicos"
-            />
-            <Feature
-              icon="chart-line"
-              text="Relatórios e análises de utilização"
-            />
+            <Feature icon="building" text="Controle total de infraestrutura e inventário" />
+            <Feature icon="clipboard-check" text="Gestão de ativos e recursos físicos" />
+            <Feature icon="chart-line" text="Relatórios e análises de utilização" />
           </div>
 
           <div className="mt-12 text-sm text-gray-500">
@@ -88,28 +70,19 @@ export default function Login() {
         {/* Lado direito - Formulário */}
         <div className="p-10 md:w-1/2 flex flex-col justify-center bg-white">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900">
-              Acesse o sistema
-            </h2>
-            <p className="text-gray-700">
-              Controle de infraestrutura e inventário
-            </p>
+            <h2 className="text-2xl font-bold text-gray-900">Acesse o sistema</h2>
+            <p className="text-gray-700">Controle de infraestrutura e inventário</p>
           </div>
 
-          <form
-            onSubmit={handleSubmit}
-            className={`space-y-6 ${shake ? "shake" : ""}`}
-          >
+          <form onSubmit={handleSubmit} className={`space-y-6 ${shake ? "shake" : ""}`}>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Usuário
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Usuário</label>
               <div className="relative">
                 <i className="fas fa-user absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"></i>
                 <input
                   type="text"
                   className="pl-10 w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 input-focus transition duration-200"
-                  placeholder="      Digite seu usuário"
+                  placeholder="Digite seu usuário"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
@@ -118,9 +91,7 @@ export default function Login() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Senha
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
               <div className="relative">
                 <i className="fas fa-lock absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"></i>
                 <input
@@ -136,9 +107,7 @@ export default function Login() {
                   className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  <i
-                    className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
-                  ></i>
+                  <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                 </button>
               </div>
             </div>
@@ -151,20 +120,18 @@ export default function Login() {
                   type="checkbox"
                   className="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300 rounded"
                 />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-700"
-                >
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
                   Lembrar de mim
                 </label>
               </div>
               <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 hover:text-blue-800"
+                <button
+                  type="button"
+                  onClick={() => navigate("/esqueci-senha")}
+                  className="font-medium text-blue-600 hover:text-blue-800 underline"
                 >
                   Esqueceu sua senha?
-                </a>
+                </button>
               </div>
             </div>
 
@@ -177,9 +144,7 @@ export default function Login() {
               </button>
             </div>
 
-            {erro && (
-              <div className="text-red-500 text-center text-sm">{erro}</div>
-            )}
+            {erro && <div className="text-red-500 text-center text-sm">{erro}</div>}
 
             <div className="text-center text-sm text-gray-500">
               Não tem acesso?{" "}

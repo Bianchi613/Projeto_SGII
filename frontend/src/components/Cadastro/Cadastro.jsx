@@ -131,8 +131,7 @@ export default function Cadastro() {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Nível de Acesso
             </label>
-            <input
-              type="number"
+            <select
               value={usuario.nivel_acesso}
               onChange={(e) =>
                 setUsuario({
@@ -142,7 +141,11 @@ export default function Cadastro() {
               }
               className="input"
               required
-            />
+            >
+              <option value={1}>Usuário (1)</option>
+              <option value={2}>Administrador (2)</option>
+              <option value={3}>Técnico (3)</option>
+            </select>
           </div>
 
           <div className="border-t pt-4">
