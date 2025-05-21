@@ -9,51 +9,63 @@ export default function Configuracoes() {
     nome: "",
     email: "",
     cargo: "",
-    senha: "",          // para criação/atualização, senha opcional na edição
+    senha: "", // senha opcional na edição
     instituicao_id: null,
-    nivel_acesso: 1,    // padrão
+    nivel_acesso: 1,
   });
   const [erro, setErro] = useState("");
   const [sucesso, setSucesso] = useState("");
-  const [criando, setCriando] = useState(false); // modo criação
+  const [criando, setCriando] = useState(false);
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
   const headers = { Authorization: `Bearer ${token}` };
 
-  // Carregar dados do usuário atual para edição
   useEffect(() => {
     if (!token) {
       navigate("/login");
       return;
     }
-
-    axios
-      .get("http://localhost:3000/usuarios/me", { headers })
-      .then((res) => {
-        setUsuario({ ...res.data, senha: "" }); // não popular senha
-        setCriando(false);
-      })
-      .catch((err) => {
-        console.error("Erro ao buscar usuário:", err);
-        if (err.response?.status === 401) {
-          localStorage.removeItem("token");
-          navigate("/login");
-        }
+    if (!criando) {
+      axios
+        .get("http://localhost:3000/usuarios/me", { headers })
+        .then((res) => {
+          setUsuario({ ...res.data, senha: "" }); // limpa senha para edição
+          setErro("");
+        })
+        .catch((err) => {
+          console.error("Erro ao buscar usuário:", err);
+          if (err.response?.status === 401) {
+            localStorage.removeItem("token");
+            navigate("/login");
+          } else {
+            setErro("Erro ao carregar dados do usuário.");
+          }
+        });
+    } else {
+      // Modo criação: limpa formulário
+      setUsuario({
+        id: null,
+        nome: "",
+        email: "",
+        cargo: "",
+        senha: "",
+        instituicao_id: null,
+        nivel_acesso: 1,
       });
-  }, [navigate, token]);
+      setErro("");
+      setSucesso("");
+    }
+  }, [navigate, token, criando]);
 
-  // Atualizar usuário existente
   const handleAtualizar = async (e) => {
     e.preventDefault();
     setErro("");
     setSucesso("");
     try {
       const payload = { ...usuario };
-      if (!payload.senha) delete payload.senha; // não enviar senha vazia
-      await axios.put(`http://localhost:3000/usuarios/${usuario.id}`, payload, {
-        headers,
-      });
+      if (!payload.senha) delete payload.senha; // não envia senha vazia
+      await axios.put(`http://localhost:3000/usuarios/${usuario.id}`, payload, { headers });
       setSucesso("Perfil atualizado com sucesso!");
     } catch (err) {
       console.error(err);
@@ -61,20 +73,18 @@ export default function Configuracoes() {
     }
   };
 
-  // Criar novo usuário
   const handleCriar = async (e) => {
     e.preventDefault();
     setErro("");
     setSucesso("");
+    if (!usuario.senha) {
+      setErro("Senha é obrigatória para criação");
+      return;
+    }
     try {
-      if (!usuario.senha) {
-        setErro("Senha é obrigatória para criação");
-        return;
-      }
       const payload = { ...usuario };
       await axios.post("http://localhost:3000/usuarios", payload, { headers });
       setSucesso("Usuário criado com sucesso!");
-      setUsuario({ id: null, nome: "", email: "", cargo: "", senha: "", instituicao_id: null, nivel_acesso: 1 });
       setCriando(false);
     } catch (err) {
       console.error(err);
@@ -82,7 +92,6 @@ export default function Configuracoes() {
     }
   };
 
-  // Deletar usuário atual
   const handleDeletar = async () => {
     if (!usuario.id) return;
     if (!window.confirm("Tem certeza que deseja deletar seu perfil? Esta ação é irreversível.")) return;
@@ -125,7 +134,9 @@ export default function Configuracoes() {
           required
         />
 
-        <label>Senha {criando ? "*" : "(deixe vazio para não alterar)"}</label>
+        <label>
+          Senha {criando ? "*" : "(deixe vazio para não alterar)"}
+        </label>
         <input
           type="password"
           value={usuario.senha}

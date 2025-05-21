@@ -28,9 +28,24 @@ export default function Login() {
 
       const token = response.data.access_token;
       localStorage.setItem("token", token);
+
+      // Se a API retorna os dados do usuário no login, salve-os no localStorage
+      const usuario = response.data.user || response.data.usuario || null;
+
+      if (usuario) {
+        localStorage.setItem("usuario", JSON.stringify(usuario));
+      } else {
+        // Se não retornar, você pode fazer outra requisição para buscar o perfil aqui
+        // Exemplo:
+        // const perfilRes = await axios.get("http://localhost:3000/usuarios/me", {
+        //   headers: { Authorization: `Bearer ${token}` },
+        // });
+        // localStorage.setItem("usuario", JSON.stringify(perfilRes.data));
+      }
+
       navigate("/dashboard");
     } catch (err) {
-      console.error(err); // 👈 agora o ESLint não reclama
+      console.error(err);
       setErro("Email ou senha inválidos");
       setShake(true);
       setTimeout(() => setShake(false), 500);
