@@ -31,7 +31,11 @@ export class AuthController {
         access_token: {
           type: 'string',
           example:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibm9tZSI6Ikpvw6NvIGRhIFNpbHZhIiwicm9sZSI6IkFkbWluaXN0cmFkb3IiLCJpYXQiOjE3MTYxMzkwMjIsImV4cCI6MTcxNjIyNTQyMn0.QNnXPRkZkCjRZghhlcXHt9IxfmOeQPaY8t1ZWnEqxOY',
+            // Exemplo do token JWT contendo id, email e cargo no payload (sub, email, cargo)
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
+            'eyJzdWIiOjEsImVtYWlsIjoiam9vQGVtYWlsLmNvbSIsImNhcmdvIjoiQWRtaW5pc3RyYWRvciIsImlhdCI6MTcxNjEzOTAyMiw' +
+            'iZXhwIjoxNzE2MjI1NDIyfQ.' +
+            'QNnXPRkZkCjRZghhlcXHt9IxfmOeQPaY8t1ZWnEqxOY',
         },
       },
     },

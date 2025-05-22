@@ -17,12 +17,13 @@ export class AuthService {
       throw new UnauthorizedException('Email ou senha inválidos');
     }
 
+    // Retorne os campos importantes para o JWT payload e para uso geral
     const { id, email: userEmail, cargo } = usuario;
     return { id, email: userEmail, cargo };
   }
 
-  // ✅ método agora é síncrono, pois não usa await
   login(user: JwtPayload): { access_token: string } {
+    // Use 'sub' como padrão JWT para o id
     const payload = {
       sub: user.id,
       email: user.email,
