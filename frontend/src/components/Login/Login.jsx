@@ -3,6 +3,17 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Login.css";
 
+function decodeJwtPayload(token) {
+  try {
+    const payloadBase64 = token.split(".")[1];
+    const payloadJson = atob(payloadBase64);
+    return JSON.parse(payloadJson);
+  } catch (e) {
+    console.error("Erro ao decodificar token JWT:", e);
+    return null;
+  }
+}
+
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -11,8 +22,21 @@ export default function Login() {
   const [erro, setErro] = useState("");
   const navigate = useNavigate();
 
+  const fetchUserDataById = async (token, userId) => {
+    try {
+      const res = await axios.get(`http://localhost:3000/usuarios/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data;
+    } catch (error) {
+      console.error("Erro ao buscar usuário por ID:", error);
+      return null;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErro("");
 
     if (!username || !password) {
       setShake(true);
@@ -21,6 +45,7 @@ export default function Login() {
     }
 
     try {
+      // Faz login e salva token
       const response = await axios.post("http://localhost:3000/auth/login", {
         email: username,
         senha: password,
@@ -29,14 +54,29 @@ export default function Login() {
       const token = response.data.access_token;
       localStorage.setItem("token", token);
 
-      const usuario = response.data.user || response.data.usuario || null;
-      if (usuario) {
-        localStorage.setItem("usuario", JSON.stringify(usuario));
+      // Decodifica token para pegar id do usuário
+      const payload = decodeJwtPayload(token);
+      const userId = payload?.sub;
+
+      if (!userId) {
+        setErro("Não foi possível obter o ID do usuário no token.");
+        return;
       }
 
+      // Busca usuário pelo ID
+      const usuario = await fetchUserDataById(token, userId);
+      if (usuario) {
+        localStorage.setItem("usuario", JSON.stringify(usuario));
+        localStorage.setItem("usuarioId", usuario.id);
+        console.log("Usuário logado:", usuario);
+      } else {
+        console.warn("Não foi possível obter dados do usuário após login.");
+      }
+
+      // Navega para dashboard
       navigate("/dashboard");
     } catch (err) {
-      console.error(err);
+      console.error("Erro no login:", err);
       setErro("Email ou senha inválidos");
       setShake(true);
       setTimeout(() => setShake(false), 500);
@@ -57,9 +97,18 @@ export default function Login() {
           </div>
 
           <div className="space-y-6 mt-8">
-            <Feature icon="building" text="Controle total de infraestrutura e inventário" />
-            <Feature icon="clipboard-check" text="Gestão de ativos e recursos físicos" />
-            <Feature icon="chart-line" text="Relatórios e análises de utilização" />
+            <Feature
+              icon="building"
+              text="Controle total de infraestrutura e inventário"
+            />
+            <Feature
+              icon="clipboard-check"
+              text="Gestão de ativos e recursos físicos"
+            />
+            <Feature
+              icon="chart-line"
+              text="Relatórios e análises de utilização"
+            />
           </div>
 
           <div className="mt-12 text-sm text-gray-500">
@@ -70,13 +119,22 @@ export default function Login() {
         {/* Lado direito - Formulário */}
         <div className="p-10 md:w-1/2 flex flex-col justify-center bg-white">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900">Acesse o sistema</h2>
-            <p className="text-gray-700">Controle de infraestrutura e inventário</p>
+            <h2 className="text-2xl font-bold text-gray-900">
+              Acesse o sistema
+            </h2>
+            <p className="text-gray-700">
+              Controle de infraestrutura e inventário
+            </p>
           </div>
 
-          <form onSubmit={handleSubmit} className={`space-y-6 ${shake ? "shake" : ""}`}>
+          <form
+            onSubmit={handleSubmit}
+            className={`space-y-6 ${shake ? "shake" : ""}`}
+          >
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Usuário</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Usuário
+              </label>
               <div className="relative">
                 <i className="fas fa-user absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"></i>
                 <input
@@ -91,7 +149,9 @@ export default function Login() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Senha
+              </label>
               <div className="relative">
                 <i className="fas fa-lock absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400"></i>
                 <input
@@ -107,7 +167,9 @@ export default function Login() {
                   className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                  <i
+                    className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                  ></i>
                 </button>
               </div>
             </div>
@@ -120,7 +182,10 @@ export default function Login() {
                   type="checkbox"
                   className="h-4 w-4 text-blue-600 focus:ring-blue-600 border-gray-300 rounded"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                <label
+                  htmlFor="remember-me"
+                  className="ml-2 block text-sm text-gray-700"
+                >
                   Lembrar de mim
                 </label>
               </div>
@@ -144,7 +209,9 @@ export default function Login() {
               </button>
             </div>
 
-            {erro && <div className="text-red-500 text-center text-sm">{erro}</div>}
+            {erro && (
+              <div className="text-red-500 text-center text-sm">{erro}</div>
+            )}
 
             <div className="text-center text-sm text-gray-500">
               Não tem acesso?{" "}

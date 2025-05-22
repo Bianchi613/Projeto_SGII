@@ -22,7 +22,9 @@ export default function Instituicao() {
 
   const fetchInstituicoes = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/instituicoes", { headers });
+      const res = await axios.get("http://localhost:3000/instituicoes", {
+        headers,
+      });
       setInstituicoes(res.data);
     } catch (err) {
       console.error("Erro ao carregar instituições:", err);
@@ -50,7 +52,14 @@ export default function Instituicao() {
     e.preventDefault();
     try {
       await axios.post("http://localhost:3000/instituicoes", form, { headers });
-      setForm({ nome: "", tipo: "", cnpj_ou_codigo: "", endereco: "", telefone: "", email: "" });
+      setForm({
+        nome: "",
+        tipo: "",
+        cnpj_ou_codigo: "",
+        endereco: "",
+        telefone: "",
+        email: "",
+      });
       fetchInstituicoes();
       setErro("");
     } catch (err) {
@@ -66,7 +75,14 @@ export default function Instituicao() {
   };
 
   const cancelarEdicao = () => {
-    setForm({ nome: "", tipo: "", cnpj_ou_codigo: "", endereco: "", telefone: "", email: "" });
+    setForm({
+      nome: "",
+      tipo: "",
+      cnpj_ou_codigo: "",
+      endereco: "",
+      telefone: "",
+      email: "",
+    });
     setEditandoId(null);
     setErro("");
   };
@@ -74,7 +90,11 @@ export default function Instituicao() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:3000/instituicoes/${editandoId}`, form, { headers });
+      await axios.put(
+        `http://localhost:3000/instituicoes/${editandoId}`,
+        form,
+        { headers },
+      );
       cancelarEdicao();
       fetchInstituicoes();
       setErro("");
@@ -85,9 +105,12 @@ export default function Instituicao() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Tem certeza que deseja remover esta instituição?")) return;
+    if (!window.confirm("Tem certeza que deseja remover esta instituição?"))
+      return;
     try {
-      await axios.delete(`http://localhost:3000/instituicoes/${id}`, { headers });
+      await axios.delete(`http://localhost:3000/instituicoes/${id}`, {
+        headers,
+      });
       if (editandoId === id) cancelarEdicao();
       fetchInstituicoes();
       setErro("");
@@ -110,12 +133,24 @@ export default function Instituicao() {
       >
         <div className="form-group">
           <label htmlFor="nome">Nome:</label>
-          <input id="nome" name="nome" value={form.nome} onChange={handleChange} required />
+          <input
+            id="nome"
+            name="nome"
+            value={form.nome}
+            onChange={handleChange}
+            required
+          />
         </div>
 
         <div className="form-group">
           <label htmlFor="tipo">Tipo:</label>
-          <input id="tipo" name="tipo" value={form.tipo} onChange={handleChange} required />
+          <input
+            id="tipo"
+            name="tipo"
+            value={form.tipo}
+            onChange={handleChange}
+            required
+          />
         </div>
 
         <div className="form-group">
@@ -131,12 +166,22 @@ export default function Instituicao() {
 
         <div className="form-group">
           <label htmlFor="endereco">Endereço:</label>
-          <input id="endereco" name="endereco" value={form.endereco} onChange={handleChange} />
+          <input
+            id="endereco"
+            name="endereco"
+            value={form.endereco}
+            onChange={handleChange}
+          />
         </div>
 
         <div className="form-group">
           <label htmlFor="telefone">Telefone:</label>
-          <input id="telefone" name="telefone" value={form.telefone} onChange={handleChange} />
+          <input
+            id="telefone"
+            name="telefone"
+            value={form.telefone}
+            onChange={handleChange}
+          />
         </div>
 
         <div className="form-group">
@@ -155,7 +200,11 @@ export default function Instituicao() {
             {editandoId ? "Salvar Alterações" : "Criar Instituição"}
           </button>
           {editandoId && (
-            <button type="button" onClick={cancelarEdicao} className="btn-secondary">
+            <button
+              type="button"
+              onClick={cancelarEdicao}
+              className="btn-secondary"
+            >
               Cancelar
             </button>
           )}
@@ -198,8 +247,18 @@ export default function Instituicao() {
                   <td>{inst.email || "-"}</td>
                   <td>
                     <div className="btn-actions-container">
-                      <button className="btn-action" onClick={() => startEdit(inst)}>Editar</button>
-                      <button className="btn-action btn-danger" onClick={() => handleDelete(inst.id)}>Remover</button>
+                      <button
+                        className="btn-action"
+                        onClick={() => startEdit(inst)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        className="btn-action btn-danger"
+                        onClick={() => handleDelete(inst.id)}
+                      >
+                        Remover
+                      </button>
                     </div>
                   </td>
                 </tr>

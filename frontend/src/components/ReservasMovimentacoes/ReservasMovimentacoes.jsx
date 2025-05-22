@@ -33,7 +33,9 @@ export default function ReservasMovimentacoes() {
 
   const fetchReservas = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/reservas", { headers });
+      const res = await axios.get("http://localhost:3000/reservas", {
+        headers,
+      });
       setReservas(res.data);
     } catch (err) {
       console.error("Erro ao buscar reservas:", err);
@@ -42,7 +44,9 @@ export default function ReservasMovimentacoes() {
 
   const fetchMovimentacoes = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/movimentacao-chaves", { headers });
+      const res = await axios.get("http://localhost:3000/movimentacao-chaves", {
+        headers,
+      });
       setMovimentacoes(res.data);
     } catch (err) {
       console.error("Erro ao buscar movimentações:", err);
@@ -62,7 +66,9 @@ export default function ReservasMovimentacoes() {
   const deleteMovimentacao = async (id) => {
     if (!window.confirm("Confirma a exclusão desta movimentação?")) return;
     try {
-      await axios.delete(`http://localhost:3000/movimentacao-chaves/${id}`, { headers });
+      await axios.delete(`http://localhost:3000/movimentacao-chaves/${id}`, {
+        headers,
+      });
       fetchMovimentacoes();
     } catch (err) {
       console.error("Erro ao deletar movimentação:", err);
@@ -73,9 +79,15 @@ export default function ReservasMovimentacoes() {
     e.preventDefault();
     try {
       if (formReserva.id) {
-        await axios.put(`http://localhost:3000/reservas/${formReserva.id}`, formReserva, { headers });
+        await axios.put(
+          `http://localhost:3000/reservas/${formReserva.id}`,
+          formReserva,
+          { headers },
+        );
       } else {
-        await axios.post("http://localhost:3000/reservas", formReserva, { headers });
+        await axios.post("http://localhost:3000/reservas", formReserva, {
+          headers,
+        });
       }
       setFormReserva(null);
       fetchReservas();
@@ -91,10 +103,14 @@ export default function ReservasMovimentacoes() {
         await axios.put(
           `http://localhost:3000/movimentacao-chaves/${formMovimentacao.id}`,
           formMovimentacao,
-          { headers }
+          { headers },
         );
       } else {
-        await axios.post("http://localhost:3000/movimentacao-chaves", formMovimentacao, { headers });
+        await axios.post(
+          "http://localhost:3000/movimentacao-chaves",
+          formMovimentacao,
+          { headers },
+        );
       }
       setFormMovimentacao(null);
       fetchMovimentacoes();
@@ -111,7 +127,12 @@ export default function ReservasMovimentacoes() {
         <input
           type="number"
           value={formReserva.usuarioId || ""}
-          onChange={(e) => setFormReserva({ ...formReserva, usuarioId: parseInt(e.target.value) })}
+          onChange={(e) =>
+            setFormReserva({
+              ...formReserva,
+              usuarioId: parseInt(e.target.value),
+            })
+          }
           required
         />
       </label>
@@ -120,7 +141,9 @@ export default function ReservasMovimentacoes() {
         <input
           type="number"
           value={formReserva.salaId || ""}
-          onChange={(e) => setFormReserva({ ...formReserva, salaId: parseInt(e.target.value) })}
+          onChange={(e) =>
+            setFormReserva({ ...formReserva, salaId: parseInt(e.target.value) })
+          }
           required
         />
       </label>
@@ -129,7 +152,9 @@ export default function ReservasMovimentacoes() {
         <input
           type="datetime-local"
           value={formatDateTimeLocal(formReserva.data_inicio)}
-          onChange={(e) => setFormReserva({ ...formReserva, data_inicio: e.target.value })}
+          onChange={(e) =>
+            setFormReserva({ ...formReserva, data_inicio: e.target.value })
+          }
           required
         />
       </label>
@@ -138,7 +163,9 @@ export default function ReservasMovimentacoes() {
         <input
           type="datetime-local"
           value={formatDateTimeLocal(formReserva.data_fim)}
-          onChange={(e) => setFormReserva({ ...formReserva, data_fim: e.target.value })}
+          onChange={(e) =>
+            setFormReserva({ ...formReserva, data_fim: e.target.value })
+          }
           required
         />
       </label>
@@ -147,7 +174,9 @@ export default function ReservasMovimentacoes() {
         <input
           type="text"
           value={formReserva.finalidade || ""}
-          onChange={(e) => setFormReserva({ ...formReserva, finalidade: e.target.value })}
+          onChange={(e) =>
+            setFormReserva({ ...formReserva, finalidade: e.target.value })
+          }
           required
         />
       </label>
@@ -155,7 +184,9 @@ export default function ReservasMovimentacoes() {
         Status:
         <select
           value={formReserva.status || ""}
-          onChange={(e) => setFormReserva({ ...formReserva, status: e.target.value })}
+          onChange={(e) =>
+            setFormReserva({ ...formReserva, status: e.target.value })
+          }
           required
         >
           <option value="">Selecione</option>
@@ -167,20 +198,29 @@ export default function ReservasMovimentacoes() {
       </label>
       <div className="form-actions">
         <button type="submit">Salvar</button>
-        <button type="button" onClick={() => setFormReserva(null)}>Cancelar</button>
+        <button type="button" onClick={() => setFormReserva(null)}>
+          Cancelar
+        </button>
       </div>
     </form>
   );
 
   const renderMovimentacaoForm = () => (
     <form onSubmit={saveMovimentacao} className="form-container">
-      <h3>{formMovimentacao.id ? "Editar Movimentação" : "Nova Movimentação"}</h3>
+      <h3>
+        {formMovimentacao.id ? "Editar Movimentação" : "Nova Movimentação"}
+      </h3>
       <label>
         Chave ID:
         <input
           type="number"
           value={formMovimentacao.chaveId || ""}
-          onChange={(e) => setFormMovimentacao({ ...formMovimentacao, chaveId: parseInt(e.target.value) })}
+          onChange={(e) =>
+            setFormMovimentacao({
+              ...formMovimentacao,
+              chaveId: parseInt(e.target.value),
+            })
+          }
           required
         />
       </label>
@@ -189,7 +229,12 @@ export default function ReservasMovimentacoes() {
         <input
           type="number"
           value={formMovimentacao.usuarioId || ""}
-          onChange={(e) => setFormMovimentacao({ ...formMovimentacao, usuarioId: parseInt(e.target.value) })}
+          onChange={(e) =>
+            setFormMovimentacao({
+              ...formMovimentacao,
+              usuarioId: parseInt(e.target.value),
+            })
+          }
           required
         />
       </label>
@@ -198,7 +243,12 @@ export default function ReservasMovimentacoes() {
         <input
           type="datetime-local"
           value={formatDateTimeLocal(formMovimentacao.data_retirada)}
-          onChange={(e) => setFormMovimentacao({ ...formMovimentacao, data_retirada: e.target.value })}
+          onChange={(e) =>
+            setFormMovimentacao({
+              ...formMovimentacao,
+              data_retirada: e.target.value,
+            })
+          }
           required
         />
       </label>
@@ -207,7 +257,12 @@ export default function ReservasMovimentacoes() {
         <input
           type="datetime-local"
           value={formatDateTimeLocal(formMovimentacao.data_devolucao)}
-          onChange={(e) => setFormMovimentacao({ ...formMovimentacao, data_devolucao: e.target.value })}
+          onChange={(e) =>
+            setFormMovimentacao({
+              ...formMovimentacao,
+              data_devolucao: e.target.value,
+            })
+          }
         />
       </label>
       <label>
@@ -215,7 +270,12 @@ export default function ReservasMovimentacoes() {
         <input
           type="number"
           value={formMovimentacao.responsavel_entrega || ""}
-          onChange={(e) => setFormMovimentacao({ ...formMovimentacao, responsavel_entrega: parseInt(e.target.value) })}
+          onChange={(e) =>
+            setFormMovimentacao({
+              ...formMovimentacao,
+              responsavel_entrega: parseInt(e.target.value),
+            })
+          }
           required
         />
       </label>
@@ -224,7 +284,12 @@ export default function ReservasMovimentacoes() {
         <input
           type="number"
           value={formMovimentacao.responsavel_recebimento || ""}
-          onChange={(e) => setFormMovimentacao({ ...formMovimentacao, responsavel_recebimento: parseInt(e.target.value) })}
+          onChange={(e) =>
+            setFormMovimentacao({
+              ...formMovimentacao,
+              responsavel_recebimento: parseInt(e.target.value),
+            })
+          }
           required
         />
       </label>
@@ -232,12 +297,19 @@ export default function ReservasMovimentacoes() {
         Observações:
         <textarea
           value={formMovimentacao.observacoes || ""}
-          onChange={(e) => setFormMovimentacao({ ...formMovimentacao, observacoes: e.target.value })}
+          onChange={(e) =>
+            setFormMovimentacao({
+              ...formMovimentacao,
+              observacoes: e.target.value,
+            })
+          }
         />
       </label>
       <div className="form-actions">
         <button type="submit">Salvar</button>
-        <button type="button" onClick={() => setFormMovimentacao(null)}>Cancelar</button>
+        <button type="button" onClick={() => setFormMovimentacao(null)}>
+          Cancelar
+        </button>
       </div>
     </form>
   );
@@ -249,9 +321,16 @@ export default function ReservasMovimentacoes() {
       <section className="reservas-section">
         <div className="section-header">
           <h2>Reservas</h2>
-          <button onClick={() => setFormReserva({})} className="btn btn-primary">Nova Reserva</button>
+          <button
+            onClick={() => setFormReserva({})}
+            className="btn btn-primary"
+          >
+            Nova Reserva
+          </button>
         </div>
-        {formReserva ? renderReservaForm() : (
+        {formReserva ? (
+          renderReservaForm()
+        ) : (
           <table className="styled-table">
             <thead>
               <tr>
@@ -274,8 +353,18 @@ export default function ReservasMovimentacoes() {
                   <td>{new Date(reserva.data_fim).toLocaleString()}</td>
                   <td>{reserva.status}</td>
                   <td>
-                    <button onClick={() => setFormReserva(reserva)} className="btn btn-edit">Editar</button>
-                    <button onClick={() => deleteReserva(reserva.id)} className="btn btn-delete">Excluir</button>
+                    <button
+                      onClick={() => setFormReserva(reserva)}
+                      className="btn btn-edit"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => deleteReserva(reserva.id)}
+                      className="btn btn-delete"
+                    >
+                      Excluir
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -287,9 +376,16 @@ export default function ReservasMovimentacoes() {
       <section className="movimentacoes-section">
         <div className="section-header">
           <h2>Movimentações de Chaves</h2>
-          <button onClick={() => setFormMovimentacao({})} className="btn btn-primary">Nova Movimentação</button>
+          <button
+            onClick={() => setFormMovimentacao({})}
+            className="btn btn-primary"
+          >
+            Nova Movimentação
+          </button>
         </div>
-        {formMovimentacao ? renderMovimentacaoForm() : (
+        {formMovimentacao ? (
+          renderMovimentacaoForm()
+        ) : (
           <table className="styled-table">
             <thead>
               <tr>
@@ -308,12 +404,26 @@ export default function ReservasMovimentacoes() {
                   <td>{mov.id}</td>
                   <td>{mov.chave?.sala?.nome || "Chave sem sala"}</td>
                   <td>{new Date(mov.data_retirada).toLocaleString()}</td>
-                  <td>{mov.data_devolucao ? new Date(mov.data_devolucao).toLocaleString() : "-"}</td>
+                  <td>
+                    {mov.data_devolucao
+                      ? new Date(mov.data_devolucao).toLocaleString()
+                      : "-"}
+                  </td>
                   <td>{mov.usuario?.nome}</td>
                   <td>{mov.observacoes}</td>
                   <td>
-                    <button onClick={() => setFormMovimentacao(mov)} className="btn btn-edit">Editar</button>
-                    <button onClick={() => deleteMovimentacao(mov.id)} className="btn btn-delete">Excluir</button>
+                    <button
+                      onClick={() => setFormMovimentacao(mov)}
+                      className="btn btn-edit"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => deleteMovimentacao(mov.id)}
+                      className="btn btn-delete"
+                    >
+                      Excluir
+                    </button>
                   </td>
                 </tr>
               ))}

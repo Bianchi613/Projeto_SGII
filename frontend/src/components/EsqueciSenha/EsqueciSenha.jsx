@@ -24,7 +24,10 @@ export default function EsqueciSenha() {
     <div className="esqueci-senha-container">
       <h2>Esqueceu sua senha?</h2>
       {enviado ? (
-        <p>Se o e-mail estiver cadastrado, você receberá instruções para redefinir a senha.</p>
+        <p>
+          Se o e-mail estiver cadastrado, você receberá instruções para
+          redefinir a senha.
+        </p>
       ) : (
         <form onSubmit={handleSubmit} className="esqueci-senha-form">
           <label>E-mail:</label>

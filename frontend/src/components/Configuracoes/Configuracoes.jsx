@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Configuracoes.css";
@@ -16,47 +16,72 @@ export default function Configuracoes() {
   const [erro, setErro] = useState("");
   const [sucesso, setSucesso] = useState("");
   const [criando, setCriando] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
-  const headers = { Authorization: `Bearer ${token}` };
+  const usuarioId = localStorage.getItem("usuarioId"); // PEGA O ID SALVO NO LOGIN
+
+  const headers = useMemo(
+    () => (token ? { Authorization: `Bearer ${token}` } : null),
+    [token],
+  );
 
   useEffect(() => {
     if (!token) {
       navigate("/login");
       return;
     }
-    if (!criando) {
-      axios
-        .get("http://localhost:3000/usuarios/me", { headers })
-        .then((res) => {
-          setUsuario({ ...res.data, senha: "" }); // limpa senha para edição
-          setErro("");
-        })
-        .catch((err) => {
-          console.error("Erro ao buscar usuário:", err);
-          if (err.response?.status === 401) {
-            localStorage.removeItem("token");
-            navigate("/login");
-          } else {
-            setErro("Erro ao carregar dados do usuário.");
-          }
-        });
-    } else {
-      // Modo criação: limpa formulário
-      setUsuario({
-        id: null,
-        nome: "",
-        email: "",
-        cargo: "",
-        senha: "",
-        instituicao_id: null,
-        nivel_acesso: 1,
-      });
-      setErro("");
-      setSucesso("");
+    if (!usuarioId) {
+      setErro("Usuário não identificado. Faça login novamente.");
+      localStorage.removeItem("token");
+      navigate("/login");
+      return;
     }
-  }, [navigate, token, criando]);
+
+    async function fetchUsuario() {
+      setLoading(true);
+      if (criando) {
+        setUsuario({
+          id: null,
+          nome: "",
+          email: "",
+          cargo: "",
+          senha: "",
+          instituicao_id: null,
+          nivel_acesso: 1,
+        });
+        setErro("");
+        setSucesso("");
+        setLoading(false);
+        return;
+      }
+      try {
+        const res = await axios.get(
+          `http://localhost:3000/usuarios/${usuarioId}`,
+          {
+            headers,
+          },
+        );
+        setUsuario({ ...res.data, senha: "" }); // limpa senha para edição
+        setErro("");
+      } catch (err) {
+        console.error("Erro ao buscar usuário:", err);
+        if (err.response?.status === 401) {
+          localStorage.removeItem("token");
+          navigate("/login");
+        } else if (err.response?.status === 404) {
+          setErro("Usuário não encontrado.");
+        } else {
+          setErro("Erro ao carregar dados do usuário.");
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchUsuario();
+  }, [navigate, criando, headers, token, usuarioId]);
 
   const handleAtualizar = async (e) => {
     e.preventDefault();
@@ -107,12 +132,22 @@ export default function Configuracoes() {
         headers,
       });
       localStorage.removeItem("token");
+      localStorage.removeItem("usuarioId");
+      localStorage.removeItem("usuario");
       navigate("/login");
     } catch (err) {
       console.error(err);
       setErro("Erro ao deletar o perfil.");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="configuracoes-container">
+        <p>Carregando dados do usuário, aguarde...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="configuracoes-container">

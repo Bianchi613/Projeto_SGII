@@ -21,14 +21,20 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
-        <Route path="/esqueci-senha" element={<EsqueciSenha />} /> {/* ✅ nova rota */}
-
+        <Route path="/esqueci-senha" element={<EsqueciSenha />} />{" "}
+        {/* ✅ nova rota */}
         {/* Protegidas */}
         <Route element={<PrivateLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/salas-chaves" element={<SalasChaves />} />
-          <Route path="/dashboard/itens-inventario" element={<ItensInventario />} />
-          <Route path="/dashboard/reservas-movimentacoes" element={<ReservasMovimentacoes />} />
+          <Route
+            path="/dashboard/itens-inventario"
+            element={<ItensInventario />}
+          />
+          <Route
+            path="/dashboard/reservas-movimentacoes"
+            element={<ReservasMovimentacoes />}
+          />
           <Route path="/dashboard/instituicao" element={<Instituicoes />} />
           <Route path="/dashboard/configuracoes" element={<Configuracoes />} />
           <Route path="/dashboard/reservas/novo" element={<NovaReserva />} />

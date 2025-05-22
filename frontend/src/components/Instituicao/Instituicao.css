@@ -3,15 +3,16 @@
   max-width: 900px;
   margin: 40px auto;
   padding: 2rem 1.25rem 2.5rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #333; /* cinza escuro */
   background-color: #fff; /* branco */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 }
 
 /* Títulos */
-h1, h2 {
+h1,
+h2 {
   text-align: center;
   color: #2563eb; /* azul vibrante */
   margin-bottom: 1.25rem;
@@ -34,7 +35,7 @@ h1, h2 {
   background: #fff; /* fundo branco */
   padding: 1.25rem 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
 }
 
@@ -110,7 +111,7 @@ button {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.95rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
   background: #fff;
@@ -122,7 +123,8 @@ button {
   text-align: left;
 }
 
-.styled-table th, .styled-table td {
+.styled-table th,
+.styled-table td {
   padding: 0.75rem 1rem;
   border-bottom: 1px solid #ddd;
 }
@@ -170,11 +172,11 @@ button {
   .form-instituicao {
     padding: 1rem;
   }
-  
+
   .form-group {
     margin-bottom: 0.75rem;
   }
-  
+
   .form-buttons {
     flex-direction: column;
     align-items: stretch;
@@ -184,7 +186,8 @@ button {
     width: 100%;
   }
 
-  .styled-table th, .styled-table td {
+  .styled-table th,
+  .styled-table td {
     padding: 0.5rem 0.625rem;
   }
 }
