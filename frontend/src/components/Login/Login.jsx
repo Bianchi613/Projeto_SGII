@@ -140,7 +140,7 @@ export default function Login() {
                 <input
                   type="text"
                   className="pl-10 w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 input-focus transition duration-200"
-                  placeholder="Digite seu usuário"
+                  placeholder="       Digite seu usuário"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required

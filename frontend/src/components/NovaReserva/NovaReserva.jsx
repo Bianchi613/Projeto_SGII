@@ -1,12 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./NovaReserva.css"; // Importação do CSS
 
 export default function NovaReserva() {
   const navigate = useNavigate();
+
+  // Recupera o usuarioId do localStorage ao montar o componente
+  const [usuarioId, setUsuarioId] = useState(null);
+
+  useEffect(() => {
+    const storedUsuarioId = localStorage.getItem("usuarioId");
+    if (storedUsuarioId) {
+      setUsuarioId(Number(storedUsuarioId));
+    } else {
+      alert("Usuário não autenticado. Faça login.");
+      navigate("/login");
+    }
+  }, [navigate]);
+
   const [form, setForm] = useState({
-    usuarioId: 1,
+    usuarioId: null, // vai setar depois com useEffect
     salaId: 1,
     data_inicio: "2025-04-20T10:00:00",
     data_fim: "2025-04-20T12:00:00",
@@ -14,12 +28,19 @@ export default function NovaReserva() {
     status: "ativa",
   });
 
+  useEffect(() => {
+    if (usuarioId !== null) {
+      setForm((prev) => ({ ...prev, usuarioId }));
+    }
+  }, [usuarioId]);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const token = localStorage.getItem("token");
     try {
       await axios.post("http://localhost:3000/reservas", form, {
@@ -45,8 +66,8 @@ export default function NovaReserva() {
           <input
             type="number"
             name="usuarioId"
-            value={form.usuarioId}
-            onChange={handleChange}
+            value={form.usuarioId || ""}
+            readOnly
           />
         </div>
         <div>
