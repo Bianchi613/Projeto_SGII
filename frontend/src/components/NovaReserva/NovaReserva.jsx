@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../services/api";
 import "./NovaReserva.css"; // Importação do CSS
 
 export default function NovaReserva() {
@@ -43,7 +43,7 @@ export default function NovaReserva() {
 
     const token = localStorage.getItem("token");
     try {
-      await axios.post("http://localhost:3000/reservas", form, {
+      await api.post("/reservas", form, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

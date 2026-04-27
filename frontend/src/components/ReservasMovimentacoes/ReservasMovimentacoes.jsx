@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useCallback, useEffect, useState } from "react";
+import api from "../../services/api";
 import "./ReservasMovimentacoes.css";
 
 // ✅ Função utilitária para formatar ISO para datetime-local
@@ -17,46 +16,34 @@ export default function ReservasMovimentacoes() {
   const [movimentacoes, setMovimentacoes] = useState([]);
   const [formReserva, setFormReserva] = useState(null);
   const [formMovimentacao, setFormMovimentacao] = useState(null);
-  const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
-  const headers = { Authorization: `Bearer ${token}` };
-
-  useEffect(() => {
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-    fetchReservas();
-    fetchMovimentacoes();
-  }, [navigate, token]);
-
-  const fetchReservas = async () => {
+  const fetchReservas = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:3000/reservas", {
-        headers,
-      });
+      const res = await api.get("/reservas");
       setReservas(res.data);
     } catch (err) {
       console.error("Erro ao buscar reservas:", err);
     }
-  };
+  }, []);
 
-  const fetchMovimentacoes = async () => {
+  const fetchMovimentacoes = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:3000/movimentacao-chaves", {
-        headers,
-      });
+      const res = await api.get("/movimentacao-chaves");
       setMovimentacoes(res.data);
     } catch (err) {
       console.error("Erro ao buscar movimentações:", err);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchReservas();
+    fetchMovimentacoes();
+  }, [fetchMovimentacoes, fetchReservas]);
 
   const deleteReserva = async (id) => {
     if (!window.confirm("Confirma a exclusão desta reserva?")) return;
     try {
-      await axios.delete(`http://localhost:3000/reservas/${id}`, { headers });
+      await api.delete(`/reservas/${id}`);
       fetchReservas();
     } catch (err) {
       console.error("Erro ao deletar reserva:", err);
@@ -66,9 +53,7 @@ export default function ReservasMovimentacoes() {
   const deleteMovimentacao = async (id) => {
     if (!window.confirm("Confirma a exclusão desta movimentação?")) return;
     try {
-      await axios.delete(`http://localhost:3000/movimentacao-chaves/${id}`, {
-        headers,
-      });
+      await api.delete(`/movimentacao-chaves/${id}`);
       fetchMovimentacoes();
     } catch (err) {
       console.error("Erro ao deletar movimentação:", err);
@@ -79,15 +64,9 @@ export default function ReservasMovimentacoes() {
     e.preventDefault();
     try {
       if (formReserva.id) {
-        await axios.put(
-          `http://localhost:3000/reservas/${formReserva.id}`,
-          formReserva,
-          { headers },
-        );
+        await api.put(`/reservas/${formReserva.id}`, formReserva);
       } else {
-        await axios.post("http://localhost:3000/reservas", formReserva, {
-          headers,
-        });
+        await api.post("/reservas", formReserva);
       }
       setFormReserva(null);
       fetchReservas();
@@ -100,17 +79,12 @@ export default function ReservasMovimentacoes() {
     e.preventDefault();
     try {
       if (formMovimentacao.id) {
-        await axios.put(
-          `http://localhost:3000/movimentacao-chaves/${formMovimentacao.id}`,
+        await api.put(
+          `/movimentacao-chaves/${formMovimentacao.id}`,
           formMovimentacao,
-          { headers },
         );
       } else {
-        await axios.post(
-          "http://localhost:3000/movimentacao-chaves",
-          formMovimentacao,
-          { headers },
-        );
+        await api.post("/movimentacao-chaves", formMovimentacao);
       }
       setFormMovimentacao(null);
       fetchMovimentacoes();

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import api from "../../services/api";
 import "./ReservaDetalhe.css";
 
 export default function ReservaDetalhe() {
@@ -11,10 +11,7 @@ export default function ReservaDetalhe() {
   useEffect(() => {
     const fetchReserva = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(`http://localhost:3000/reservas/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await api.get(`/reservas/${id}`);
         setReserva(res.data);
       } catch (err) {
         console.error("Erro ao buscar reserva:", err);
@@ -31,12 +28,9 @@ export default function ReservaDetalhe() {
 
   const handleUpdate = async () => {
     try {
-      const token = localStorage.getItem("token");
-      await axios.put(`http://localhost:3000/reservas/${id}`, reserva, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.put(`/reservas/${id}`, reserva);
       alert("Reserva atualizada com sucesso!");
-      navigate(-1); // 🔙 volta à tela anterior
+      navigate(-1);
     } catch (err) {
       console.error("Erro ao atualizar reserva:", err);
       alert("Erro ao atualizar.");
@@ -46,12 +40,9 @@ export default function ReservaDetalhe() {
   const handleDelete = async () => {
     if (!window.confirm("Tem certeza que deseja excluir esta reserva?")) return;
     try {
-      const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:3000/reservas/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.delete(`/reservas/${id}`);
       alert("Reserva excluída.");
-      navigate(-1); // 🔙 volta à tela anterior
+      navigate(-1);
     } catch (err) {
       console.error("Erro ao excluir reserva:", err);
       alert("Erro ao excluir.");

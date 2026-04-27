@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../services/api";
 import "./Instituicao.css";
 
 export default function Instituicao() {
@@ -17,14 +17,9 @@ export default function Instituicao() {
   const [erro, setErro] = useState("");
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
-  const headers = { Authorization: `Bearer ${token}` };
-
-  const fetchInstituicoes = async () => {
+  const fetchInstituicoes = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:3000/instituicoes", {
-        headers,
-      });
+      const res = await api.get("/instituicoes");
       setInstituicoes(res.data);
     } catch (err) {
       console.error("Erro ao carregar instituições:", err);
@@ -34,15 +29,11 @@ export default function Instituicao() {
         navigate("/login");
       }
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
-    if (!token) {
-      navigate("/login");
-      return;
-    }
     fetchInstituicoes();
-  }, [navigate, token]);
+  }, [fetchInstituicoes]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -51,7 +42,7 @@ export default function Instituicao() {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/instituicoes", form, { headers });
+      await api.post("/instituicoes", form);
       setForm({
         nome: "",
         tipo: "",
@@ -90,11 +81,7 @@ export default function Instituicao() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(
-        `http://localhost:3000/instituicoes/${editandoId}`,
-        form,
-        { headers },
-      );
+      await api.put(`/instituicoes/${editandoId}`, form);
       cancelarEdicao();
       fetchInstituicoes();
       setErro("");
@@ -108,9 +95,7 @@ export default function Instituicao() {
     if (!window.confirm("Tem certeza que deseja remover esta instituição?"))
       return;
     try {
-      await axios.delete(`http://localhost:3000/instituicoes/${id}`, {
-        headers,
-      });
+      await api.delete(`/instituicoes/${id}`);
       if (editandoId === id) cancelarEdicao();
       fetchInstituicoes();
       setErro("");

@@ -1,46 +1,112 @@
-# SGII – Sistema de Gestão Integrada Inteligente
+# SGII - Sistema de Gestão Integrada Inteligente
 
-## 🎯 Tema
+Plataforma web para gestão de espaços físicos, controle de chaves, reservas e inventário em ambientes institucionais.
 
-Plataforma web para **gerenciamento inteligente de espaços físicos, controle de chaves e gestão de inventário** de recursos compartilhados. Voltada para ambientes institucionais como escolas, empresas, laboratórios e órgãos públicos.
+## Funcionalidades
 
-## 💡 Escopo Funcional
+- Controle de chaves com cadastro, disponibilidade e movimentações.
+- Reserva de salas e recursos compartilhados.
+- Gestão de inventário de equipamentos, móveis e materiais.
+- Cadastro de instituições e usuários.
+- Autenticação com JWT.
+- Painel administrativo com resumo de reservas, chaves, salas e inventário.
+- Documentação da API via Swagger.
 
-A plataforma oferece funcionalidades integradas, incluindo:
+## Tecnologias
 
-- 🔑 **Controle de chaves**: cadastro, empréstimo e rastreamento de chaves físicas.
-- 🗓️ **Reserva de ambientes e recursos**: agendamento de salas, auditórios, laboratórios e veículos.
-- 🧾 **Gestão de inventário**: registro e monitoramento de equipamentos, móveis e materiais.
-- 📊 **Painel administrativo**: gráficos interativos, relatórios e alertas de uso.
-- 👥 **Gestão de usuários**: sistema multiusuário com autenticação segura e permissões por perfil.
-- 📁 **Upload de documentos**: anexos para reservas, inventário e auditoria.
-- 🧾 **Geração de relatórios**: emissão de relatórios em PDF para reservas, movimentações e histórico.
+### Frontend
 
-## 🧰 Tecnologias Utilizadas
+- React com Vite
+- React Router
+- Axios
+- TailwindCSS
 
-### 🔹 **Frontend**
+### Backend
 
-- [React](https://reactjs.org/) com [Vite](https://vitejs.dev/)
-- [TailwindCSS](https://tailwindcss.com/) para estilização
-- [React Router](https://reactrouter.com/) para navegação
-- [Axios](https://axios-http.com/) para requisições HTTP
+- Node.js com NestJS
+- Sequelize ORM
+- PostgreSQL
+- Passport/JWT
+- Swagger
 
-### 🔹 **Backend**
+## Estrutura
 
-- [Node.js](https://nodejs.org/) com [NestJS](https://nestjs.com/)
-- [Sequelize ORM](https://sequelize.org/) para acesso ao banco de dados
-- Autenticação com [JWT](https://jwt.io/)
-- Validação e estruturação com [class-validator](https://github.com/typestack/class-validator)
+```text
+Projeto_SGII/
+├── backend/   # API NestJS
+├── frontend/  # Aplicação React/Vite
+├── docs/      # Documentos do projeto
+└── README.md
+```
 
-### 🔹 **Banco de Dados**
+## Configuração
 
-- [PostgreSQL](https://www.postgresql.org/)
+Crie os arquivos de ambiente a partir dos exemplos:
 
-### 🔹 **Extras**
+```bash
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+```
 
-- Upload de arquivos com `multer`
-- Geração de PDFs com `pdfkit` ou `puppeteer`
-- Swagger para documentação de API
-- Docker (futuramente) para ambiente de produção
+Principais variáveis do backend:
 
-## 🚧 Estrutura do Projeto
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=12345
+DB_DATABASE=projeto_sgii
+DB_SYNC=true
+DB_LOGGING=false
+JWT_SECRET=troque_este_segredo_em_producao
+JWT_EXPIRES_IN=1h
+```
+
+Principal variável do frontend:
+
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+## Como Rodar
+
+Backend:
+
+```bash
+cd backend
+npm install
+npm run start:dev
+```
+
+Frontend:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+URLs padrão:
+
+- Frontend: `http://localhost:5173`
+- API: `http://localhost:3000`
+- Swagger: `http://localhost:3000/api/docs`
+
+## Verificação
+
+Backend:
+
+```bash
+cd backend
+npm run build
+npm test
+npx eslint "src/**/*.ts"
+```
+
+Frontend:
+
+```bash
+cd frontend
+npm run build
+npm run lint
+```

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../services/api";
 import "./EsqueciSenha.css";
 
 export default function EsqueciSenha() {
@@ -12,7 +12,7 @@ export default function EsqueciSenha() {
     e.preventDefault();
     try {
       // Substitua pela sua rota real de recuperação de senha se tiver
-      await axios.post("http://localhost:3000/auth/recuperar-senha", { email });
+      await api.post("/auth/recuperar-senha", { email });
       setEnviado(true);
     } catch (err) {
       console.error("Erro ao enviar instruções:", err);

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../services/api";
 import "./Cadastro.css";
 
 export default function Cadastro() {
@@ -24,8 +24,8 @@ export default function Cadastro() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/instituicoes")
+    api
+      .get("/instituicoes")
       .then((res) => setInstituicoes(res.data))
       .catch((err) => console.error(err));
   }, []);
@@ -36,14 +36,11 @@ export default function Cadastro() {
       let idInstituicao = instituicaoId;
 
       if (!usarExistente) {
-        const res = await axios.post(
-          "http://localhost:3000/instituicoes",
-          novaInstituicao,
-        );
+        const res = await api.post("/instituicoes", novaInstituicao);
         idInstituicao = res.data.id;
       }
 
-      await axios.post("http://localhost:3000/usuarios", {
+      await api.post("/usuarios", {
         ...usuario,
         senha_hash: usuario.senha,
         instituicao_id: idInstituicao,

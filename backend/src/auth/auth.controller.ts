@@ -3,8 +3,10 @@ import { ApiTags, ApiOperation, ApiBody, ApiResponse } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local.guard';
 import { JwtPayload } from './auth.types';
+import { Public } from './public.decorator';
 
 @ApiTags('Auth')
+@Public()
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -46,5 +48,26 @@ export class AuthController {
   })
   login(@Request() req: { user: JwtPayload }): { access_token: string } {
     return this.authService.login(req.user);
+  }
+
+  @Post('recuperar-senha')
+  @ApiOperation({ summary: 'Solicitar recuperação de senha' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        email: { type: 'string', example: 'joao@email.com' },
+      },
+      required: ['email'],
+    },
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Solicitação recebida sem revelar se o e-mail existe.',
+  })
+  recuperarSenha(): { message: string } {
+    return {
+      message: 'Se o e-mail estiver cadastrado, as instruções serão enviadas.',
+    };
   }
 }

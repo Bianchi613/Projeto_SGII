@@ -9,8 +9,9 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { UsuarioService } from './usuario.service';
+import { UsuarioInput, UsuarioService } from './usuario.service';
 import { Usuario } from './usuario.model';
+import { Public } from '../auth/public.decorator';
 import {
   ApiTags,
   ApiOperation,
@@ -62,6 +63,7 @@ export class UsuarioController {
   }
 
   @Post()
+  @Public()
   @ApiOperation({ summary: 'Criar um novo usuário' })
   @ApiBody({
     description:
@@ -82,7 +84,7 @@ export class UsuarioController {
     description: 'Usuário criado com sucesso',
   })
   @ApiResponse({ status: 400, description: 'Erro ao criar usuário' })
-  async create(@Body() data: any): Promise<Usuario> {
+  async create(@Body() data: UsuarioInput): Promise<Usuario> {
     try {
       return await this.usuarioService.create(data); // <- aqui o service deve gerar o hash
     } catch (error: unknown) {
@@ -115,7 +117,10 @@ export class UsuarioController {
     description: 'Usuário atualizado com sucesso',
   })
   @ApiResponse({ status: 400, description: 'Erro ao atualizar usuário' })
-  async update(@Param('id') id: number, @Body() data: any): Promise<Usuario> {
+  async update(
+    @Param('id') id: number,
+    @Body() data: Partial<UsuarioInput>,
+  ): Promise<Usuario> {
     try {
       return await this.usuarioService.update(id, data); // <- o service deve tratar o hash
     } catch (error: unknown) {

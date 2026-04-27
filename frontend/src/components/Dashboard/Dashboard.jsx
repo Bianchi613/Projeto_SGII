@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../services/api";
 import "./Dashboard.css";
 
 export default function Dashboard() {
@@ -26,11 +26,11 @@ export default function Dashboard() {
       try {
         const [chavesRes, reservasRes, salasRes, itensRes, movimentacoesRes] =
           await Promise.all([
-            axios.get("http://localhost:3000/chaves", { headers }),
-            axios.get("http://localhost:3000/reservas", { headers }),
-            axios.get("http://localhost:3000/salas", { headers }),
-            axios.get("http://localhost:3000/itens-inventario", { headers }),
-            axios.get("http://localhost:3000/movimentacao-chaves", { headers }),
+            api.get("/chaves", { headers }),
+            api.get("/reservas", { headers }),
+            api.get("/salas", { headers }),
+            api.get("/itens-inventario", { headers }),
+            api.get("/movimentacao-chaves", { headers }),
           ]);
 
         const reservasArray = Array.isArray(reservasRes.data)

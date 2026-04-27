@@ -19,6 +19,7 @@ import {
 
 import { ChaveService } from './chave.service';
 import { Chave } from './chave.model';
+import { ChaveInput } from './chave.repository';
 
 @ApiTags('Chaves')
 @Controller('chaves')
@@ -77,7 +78,7 @@ export class ChaveController {
     description: 'Chave criada com sucesso',
   })
   @ApiResponse({ status: 400, description: 'Erro ao criar chave' })
-  async create(@Body() data: Omit<Chave, 'id'>): Promise<Chave> {
+  async create(@Body() data: ChaveInput): Promise<Chave> {
     try {
       return await this.chaveService.create(data);
     } catch {
@@ -106,7 +107,7 @@ export class ChaveController {
   @ApiResponse({ status: 400, description: 'Erro ao atualizar chave' })
   async update(
     @Param('id') id: number,
-    @Body() data: Partial<Omit<Chave, 'id'>>,
+    @Body() data: Partial<ChaveInput>,
   ): Promise<Chave> {
     try {
       return await this.chaveService.update(id, data);

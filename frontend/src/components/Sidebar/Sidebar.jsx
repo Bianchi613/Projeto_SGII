@@ -1,6 +1,6 @@
 // src/components/Sidebar/Sidebar.jsx
 import "./Sidebar.css"; // Certifique-se que existe o CSS para estilizar conforme seu layout
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaTachometerAlt,
   FaKey,
@@ -12,6 +12,15 @@ import {
 } from "react-icons/fa";
 
 export default function Sidebar() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
+    localStorage.removeItem("usuarioId");
+    navigate("/login");
+  };
+
   return (
     <aside className="sidebar">
       <h2 className="sidebar-title">SGII</h2>
@@ -38,9 +47,13 @@ export default function Sidebar() {
         <NavLink to="/dashboard/configuracoes" className="sidebar-link">
           <FaCog className="sidebar-icon" /> Configurações
         </NavLink>
-        <NavLink to="/login" className="sidebar-link sidebar-logout">
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="sidebar-link sidebar-logout"
+        >
           <FaSignOutAlt className="sidebar-icon" /> Sair
-        </NavLink>
+        </button>
       </nav>
     </aside>
   );

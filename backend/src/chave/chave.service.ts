@@ -3,7 +3,7 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { ChaveRepository } from './chave.repository';
+import { ChaveInput, ChaveRepository } from './chave.repository';
 import { Chave } from './chave.model';
 
 @Injectable()
@@ -22,15 +22,15 @@ export class ChaveService {
     return chave;
   }
 
-  async create(data: Omit<Chave, 'id'>): Promise<Chave> {
+  async create(data: ChaveInput): Promise<Chave> {
     try {
-      return await this.chaveRepository.create(data as any); // Substituir por DTO depois
+      return await this.chaveRepository.create(data);
     } catch {
       throw new BadRequestException('Erro ao criar chave.');
     }
   }
 
-  async update(id: number, data: Partial<Chave>): Promise<Chave> {
+  async update(id: number, data: Partial<ChaveInput>): Promise<Chave> {
     const chave = await this.findOne(id);
     try {
       return await this.chaveRepository.update(chave, data);

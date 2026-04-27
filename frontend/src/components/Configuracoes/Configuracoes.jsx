@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../services/api";
 import "./Configuracoes.css";
 
 export default function Configuracoes() {
@@ -57,12 +57,9 @@ export default function Configuracoes() {
         return;
       }
       try {
-        const res = await axios.get(
-          `http://localhost:3000/usuarios/${usuarioId}`,
-          {
-            headers,
-          },
-        );
+        const res = await api.get(`/usuarios/${usuarioId}`, {
+          headers,
+        });
         setUsuario({ ...res.data, senha: "" }); // limpa senha para edição
         setErro("");
       } catch (err) {
@@ -90,7 +87,7 @@ export default function Configuracoes() {
     try {
       const payload = { ...usuario };
       if (!payload.senha) delete payload.senha; // não envia senha vazia
-      await axios.put(`http://localhost:3000/usuarios/${usuario.id}`, payload, {
+      await api.put(`/usuarios/${usuario.id}`, payload, {
         headers,
       });
       setSucesso("Perfil atualizado com sucesso!");
@@ -110,7 +107,7 @@ export default function Configuracoes() {
     }
     try {
       const payload = { ...usuario };
-      await axios.post("http://localhost:3000/usuarios", payload, { headers });
+      await api.post("/usuarios", payload, { headers });
       setSucesso("Usuário criado com sucesso!");
       setCriando(false);
     } catch (err) {
@@ -128,7 +125,7 @@ export default function Configuracoes() {
     )
       return;
     try {
-      await axios.delete(`http://localhost:3000/usuarios/${usuario.id}`, {
+      await api.delete(`/usuarios/${usuario.id}`, {
         headers,
       });
       localStorage.removeItem("token");

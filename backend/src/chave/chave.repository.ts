@@ -1,6 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { CreationAttributes } from 'sequelize';
 import { Chave } from './chave.model';
+
+export type ChaveInput = {
+  codigo_identificador: string;
+  sala_id: number;
+  disponivel?: boolean;
+  observacoes?: string;
+};
 
 @Injectable()
 export class ChaveRepository {
@@ -17,11 +25,11 @@ export class ChaveRepository {
     return this.chaveModel.findByPk(id, { include: { all: true } });
   }
 
-  async create(data: Omit<Chave, 'id'>): Promise<Chave> {
-    return this.chaveModel.create(data as any); // ou crie DTO para evitar o "any"
+  async create(data: ChaveInput): Promise<Chave> {
+    return this.chaveModel.create(data as CreationAttributes<Chave>);
   }
 
-  async update(chave: Chave, data: Partial<Chave>): Promise<Chave> {
+  async update(chave: Chave, data: Partial<ChaveInput>): Promise<Chave> {
     return chave.update(data);
   }
 

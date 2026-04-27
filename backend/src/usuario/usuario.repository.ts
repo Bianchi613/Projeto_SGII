@@ -1,7 +1,9 @@
 // ✅ usuario.repository.ts
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { CreationAttributes } from 'sequelize';
 import { Usuario } from './usuario.model';
+import type { UsuarioCreateData } from './usuario.service';
 
 @Injectable()
 export class UsuarioRepository {
@@ -22,11 +24,14 @@ export class UsuarioRepository {
     return this.usuarioModel.findOne({ where: { email } });
   }
 
-  async create(data: any): Promise<Usuario> {
-    return this.usuarioModel.create(data);
+  async create(data: UsuarioCreateData): Promise<Usuario> {
+    return this.usuarioModel.create(data as CreationAttributes<Usuario>);
   }
 
-  async update(usuario: Usuario, data: any): Promise<Usuario> {
+  async update(
+    usuario: Usuario,
+    data: Partial<UsuarioCreateData>,
+  ): Promise<Usuario> {
     return usuario.update(data);
   }
 

@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useCallback, useEffect, useState } from "react";
+import api from "../../services/api";
 import "./SalasChaves.css";
 
 export default function SalasChaves() {
@@ -23,42 +22,33 @@ export default function SalasChaves() {
     observacoes: "",
   });
 
-  const navigate = useNavigate();
-
-  const token = localStorage.getItem("token");
-  const headers = { Authorization: `Bearer ${token}` };
-
-  useEffect(() => {
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-    fetchSalas();
-    fetchChaves();
-  }, [navigate]);
-
-  const fetchSalas = async () => {
+  const fetchSalas = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:3000/salas", { headers });
+      const res = await api.get("/salas");
       setSalas(res.data);
     } catch (err) {
       console.error("Erro ao buscar salas:", err);
     }
-  };
+  }, []);
 
-  const fetchChaves = async () => {
+  const fetchChaves = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:3000/chaves", { headers });
+      const res = await api.get("/chaves");
       setChaves(res.data);
     } catch (err) {
       console.error("Erro ao buscar chaves:", err);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchSalas();
+    fetchChaves();
+  }, [fetchChaves, fetchSalas]);
 
   // CRUD Salas
   const criarSala = async () => {
     try {
-      await axios.post("http://localhost:3000/salas", novaSala, { headers });
+      await api.post("/salas", novaSala);
       setNovaSala({
         nome: "",
         tipo: "",
@@ -87,11 +77,7 @@ export default function SalasChaves() {
 
   const salvarEdicaoSala = async () => {
     try {
-      await axios.put(
-        `http://localhost:3000/salas/${editSalaId}`,
-        editSalaData,
-        { headers },
-      );
+      await api.put(`/salas/${editSalaId}`, editSalaData);
       setEditSalaId(null);
       setEditSalaData(null);
       fetchSalas();
@@ -103,7 +89,7 @@ export default function SalasChaves() {
   const deletarSala = async (id) => {
     if (!window.confirm("Confirma exclusão da sala?")) return;
     try {
-      await axios.delete(`http://localhost:3000/salas/${id}`, { headers });
+      await api.delete(`/salas/${id}`);
       fetchSalas();
     } catch (err) {
       console.error("Erro ao deletar sala:", err);
@@ -113,7 +99,7 @@ export default function SalasChaves() {
   // CRUD Chaves
   const criarChave = async () => {
     try {
-      await axios.post("http://localhost:3000/chaves", novaChave, { headers });
+      await api.post("/chaves", novaChave);
       setNovaChave({ sala_id: "", status: "", observacoes: "" });
       fetchChaves();
     } catch (err) {
@@ -133,11 +119,7 @@ export default function SalasChaves() {
 
   const salvarEdicaoChave = async () => {
     try {
-      await axios.put(
-        `http://localhost:3000/chaves/${editChaveId}`,
-        editChaveData,
-        { headers },
-      );
+      await api.put(`/chaves/${editChaveId}`, editChaveData);
       setEditChaveId(null);
       setEditChaveData(null);
       fetchChaves();
@@ -149,7 +131,7 @@ export default function SalasChaves() {
   const deletarChave = async (id) => {
     if (!window.confirm("Confirma exclusão da chave?")) return;
     try {
-      await axios.delete(`http://localhost:3000/chaves/${id}`, { headers });
+      await api.delete(`/chaves/${id}`);
       fetchChaves();
     } catch (err) {
       console.error("Erro ao deletar chave:", err);

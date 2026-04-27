@@ -20,6 +20,7 @@ import {
 import { InstituicaoService } from './instituicao.service';
 import { Instituicao } from './instituicao.model';
 import { InstituicaoInput } from './instituicao.repository';
+import { Public } from '../auth/public.decorator';
 
 @ApiTags('Instituições')
 @Controller('instituicoes')
@@ -27,6 +28,7 @@ export class InstituicaoController {
   constructor(private readonly instituicaoService: InstituicaoService) {}
 
   @Get()
+  @Public()
   @ApiOperation({ summary: 'Listar todas as instituições' })
   @ApiResponse({
     status: 200,
@@ -67,6 +69,7 @@ export class InstituicaoController {
   }
 
   @Post()
+  @Public()
   @ApiOperation({ summary: 'Criar uma nova instituição' })
   @ApiBody({
     description: 'Dados para criação da instituição',

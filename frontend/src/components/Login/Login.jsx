@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../services/api";
 import "./Login.css";
 
 function decodeJwtPayload(token) {
@@ -24,7 +24,7 @@ export default function Login() {
 
   const fetchUserDataById = async (token, userId) => {
     try {
-      const res = await axios.get(`http://localhost:3000/usuarios/${userId}`, {
+      const res = await api.get(`/usuarios/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return res.data;
@@ -46,7 +46,7 @@ export default function Login() {
 
     try {
       // Faz login e salva token
-      const response = await axios.post("http://localhost:3000/auth/login", {
+      const response = await api.post("/auth/login", {
         email: username,
         senha: password,
       });

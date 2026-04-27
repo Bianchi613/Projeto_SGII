@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useCallback, useEffect, useState } from "react";
+import api from "../../services/api";
 import "./ItensInventario.css";
 
-const API_URL = "http://localhost:3000/itens-inventario";
+const API_URL = "/itens-inventario";
 
 export default function ItensInventario() {
   const [itens, setItens] = useState([]);
@@ -21,28 +20,14 @@ export default function ItensInventario() {
     instituicaoId: "",
   });
   const [instituicoes, setInstituicoes] = useState([]);
-  const navigate = useNavigate();
-
-  // Pega token e seta headers
-  const getHeaders = () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-      return null;
-    }
-    return { Authorization: `Bearer ${token}` };
-  };
 
   // Busca lista de itens e instituições
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const headers = getHeaders();
-      if (!headers) return;
-
       const [itensRes, instRes] = await Promise.all([
-        axios.get(API_URL, { headers }),
-        axios.get("http://localhost:3000/instituicoes", { headers }),
+        api.get(API_URL),
+        api.get("/instituicoes"),
       ]);
       setItens(itensRes.data);
       setInstituicoes(instRes.data);
@@ -51,11 +36,11 @@ export default function ItensInventario() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
-  }, [navigate]);
+  }, [fetchData]);
 
   // Manipula mudanças nos inputs do formulário
   const handleInputChange = (e) => {
@@ -67,13 +52,10 @@ export default function ItensInventario() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const headers = getHeaders();
-      if (!headers) return;
-
       if (formMode === "create") {
-        await axios.post(API_URL, formData, { headers });
+        await api.post(API_URL, formData);
       } else if (formMode === "edit") {
-        await axios.put(`${API_URL}/${formData.id}`, formData, { headers });
+        await api.put(`${API_URL}/${formData.id}`, formData);
       }
       setFormMode("list");
       fetchData();
@@ -102,10 +84,7 @@ export default function ItensInventario() {
   const handleDelete = async (id) => {
     if (!window.confirm("Tem certeza que deseja deletar este item?")) return;
     try {
-      const headers = getHeaders();
-      if (!headers) return;
-
-      await axios.delete(`${API_URL}/${id}`, { headers });
+      await api.delete(`${API_URL}/${id}`);
       fetchData();
     } catch (err) {
       console.error("Erro ao deletar item:", err);
