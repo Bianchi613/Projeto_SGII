@@ -31,7 +31,10 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
         password: configService.get<string>('DB_PASSWORD', ''),
         database: configService.get<string>('DB_DATABASE', 'projeto_sgii'),
         autoLoadModels: true,
-        synchronize: configService.get<string>('DB_SYNC', 'true') === 'true',
+        // Nunca sincronize automaticamente o esquema em produção.
+        synchronize:
+          configService.get<string>('NODE_ENV', 'development') !== 'production' &&
+          configService.get<string>('DB_SYNC', 'false') === 'true',
         logging: configService.get<string>('DB_LOGGING', 'false') === 'true',
       }),
     }),
