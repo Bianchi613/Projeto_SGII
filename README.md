@@ -56,7 +56,8 @@ DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=12345
 DB_DATABASE=projeto_sgii
-DB_SYNC=true
+DB_SYNC=false
+NODE_ENV=development
 DB_LOGGING=false
 JWT_SECRET=troque_este_segredo_em_producao
 JWT_EXPIRES_IN=1h
@@ -67,6 +68,12 @@ Principal variável do frontend:
 ```env
 VITE_API_URL=http://localhost:3000
 ```
+
+## Segurança do banco de dados
+
+A partir do [PR #16](https://github.com/Bianchi613/Projeto_SGII/pull/16), a sincronização automática do esquema do PostgreSQL fica **sempre desativada em produção**, inclusive se `DB_SYNC=true`. O padrão de desenvolvimento também é `DB_SYNC=false`. Para bancos novos em produção, provisione tabelas com migrações ou processo de implantação validado; não reative sincronização automática para corrigir uma falta de esquema.
+
+Veja [SECURITY.md](SECURITY.md) para a configuração segura, matriz de comportamento, testes e riscos ainda não cobertos. Não use senhas de exemplo em ambientes reais.
 
 ## Como Rodar
 
